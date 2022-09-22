@@ -21,7 +21,6 @@ def calculateDistances(velocity,angle,gravity,height):
     horiDistance = initialHoriVelocity * flightTime
     timeOfVertDistance = (velocity*-1)/gravity
     vertDistance = (velocity * timeOfVertDistance + 0.5*gravity*timeOfVertDistance**2)+height
-    print(vertDistance)
     return (horiDistance,vertDistance)
 
 #use distances to calculate required scale
@@ -47,23 +46,21 @@ def scaleValues(xVelocity,yVelocity,gravity,multi,height):
 #check whether their guess is equal to the answer
 #display whether they are right on screen
 def checkGuess(screen,finalXVelocity,finalYVelocity,height,finalHoriDisplacement,guess,v,multi):
-    finalVelocity = round(math.sqrt(finalYVelocity**2+finalXVelocity**2),3)
-    finalDisplacement = round((math.sqrt(height**2+finalHoriDisplacement**2))*multi,3)
-    finalHoriDisplacement = round((finalHoriDisplacement)*multi,3)
-    finalYVelocity = round(finalYVelocity,3)
+    finalVelocity = round(math.sqrt(finalYVelocity**2+finalXVelocity**2),1)
+    finalDisplacement = round((math.sqrt(height**2+finalHoriDisplacement**2))*multi,1)
+    finalHoriDisplacement = round((finalHoriDisplacement)*multi,1)
+    finalYVelocity = round(finalYVelocity,1)
     answers = [finalHoriDisplacement,finalDisplacement,finalYVelocity,finalVelocity]
-    print (answers)
-    print(guess)
-    print("it got past here")
     if v != 1:
-        print("it got past if")
         pygame.font.init()
-        print (v)
         font = pygame.font.SysFont("Arial",50)
         if guess == answers[v-2]:
             text = font.render("Correct Answer!!",True,(0,0,0),(255,255,255))
         else:
-            text = font.render("Incorrect, correct answer was: ",True,(0,0,0),(255,255,255))
+            answerText = str(answers[v-2])
+            incorrectText = ("Incorrect, correct answer was: ")
+            totalText = (incorrectText + answerText)
+            text = font.render(totalText,True,(0,0,0),(255,255,255))
         textBox = text.get_rect()
         textBox.center = (750,400)
         screen.blit(text,textBox)
@@ -152,10 +149,8 @@ def updateCircle(circleX,circleY,circleXVelocity,circleYVelocity,radianAngle,hei
     drawXText(screen,xScales)
     drawYText(screen,yScales)
     if  circleY - circleSize == 0:
-        print("its in")
         drawFinalVelocity(screen,finalYVelocity)
         checkGuess(screen,circleXVelocity,finalYVelocity,height,circleX,guess,v,multi)
-        print("it did it")
     pygame.display.update()
 
 #calculates the scaled value of circle size
@@ -176,8 +171,6 @@ def calculateVelocities(angle,velocity):
 #final adjustments subroutine
 def finalAdjustments(Y,circleX,horiDistance,circleSize,multi):
     remainingY = circleSize-Y
-    print("remainingY:",remainingY)
     remainingX = horiDistance - circleX*multi
-    print("remainingX: ",remainingX)
     return (remainingX,remainingY)
 

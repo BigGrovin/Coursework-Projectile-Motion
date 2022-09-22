@@ -81,38 +81,36 @@ def collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,
 
 #run simulation subroutine
 def runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox,v,guessEntryBox):
-    #try:
-    whichGuess = v.get()
-    guess = round(float(guessEntryBox.get()),3)
-    (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
-    (circleXVelocity,circleYVelocity,radianAngle)= main.calculateVelocities(angle,velocity)
-    finalYVelocity = -1*(math.sqrt(circleYVelocity**2 + 2*gravity*height*-1))
-    print(finalYVelocity)
-    (horiDistance,vertDistance)=main.calculateDistances(velocity,angle,gravity,height)
-    print(horiDistance)
-    (xScales,yScales,multi) = main.calculateScale(horiDistance,vertDistance,height,circleSize)
-    (circleXVelocity,circleYVelocity,gravity,height) = main.scaleValues(circleXVelocity,circleYVelocity,gravity,multi,height)
-    circleSize = main.calculateCircleSize(circleSize,multi)
-    circleX = 0
-    circleY = circleSize + 0.0000000001 + height
-    first = True
-    while circleY > circleSize:
+    try:
+        whichGuess = v.get()
+        try:
+            guess = round(float(guessEntryBox.get()),1)
+        except:
+            guess = 0
+        (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
+        (circleXVelocity,circleYVelocity,radianAngle)= main.calculateVelocities(angle,velocity)
+        finalYVelocity = -1*(math.sqrt(circleYVelocity**2 + 2*gravity*height*-1))
+        (horiDistance,vertDistance)=main.calculateDistances(velocity,angle,gravity,height)
+        (xScales,yScales,multi) = main.calculateScale(horiDistance,vertDistance,height,circleSize)
+        (circleXVelocity,circleYVelocity,gravity,height) = main.scaleValues(circleXVelocity,circleYVelocity,gravity,multi,height)
+        circleSize = main.calculateCircleSize(circleSize,multi)
+        circleX = 0
+        circleY = circleSize + 0.0000000001 + height
+        first = True
+        while circleY > circleSize:
+            main.updateCircle(circleX,circleY,circleXVelocity,circleYVelocity,radianAngle,height,xScales,yScales,circleSize,finalYVelocity,multi,guess,whichGuess)
+            if first:
+                time.sleep(1)
+            first = False 
+            (circleX,circleY,circleXVelocity,circleYVelocity,radianAngle)= main.calculateCircle(circleX,circleY,circleXVelocity,circleYVelocity,0,gravity,0.35)
+        (addX,addY) = main.finalAdjustments(circleY,circleX,horiDistance,circleSize,multi)
+        circleX += addX/multi
+        circleY += addY
         main.updateCircle(circleX,circleY,circleXVelocity,circleYVelocity,radianAngle,height,xScales,yScales,circleSize,finalYVelocity,multi,guess,whichGuess)
-        if first:
-            time.sleep(1)
-        first = False 
-        (circleX,circleY,circleXVelocity,circleYVelocity,radianAngle)= main.calculateCircle(circleX,circleY,circleXVelocity,circleYVelocity,0,gravity,0.2)
-        print(circleY)
-    (addX,addY) = main.finalAdjustments(circleY,circleX,horiDistance,circleSize,multi)
-    circleX += addX/multi
-    print("final x = ",circleX)
-    circleY += addY
-    print(circleY)
-    main.updateCircle(circleX,circleY,circleXVelocity,circleYVelocity,radianAngle,height,xScales,yScales,circleSize,finalYVelocity,multi,guess,whichGuess)
-    time.sleep(1)
-    pygame.quit()
-    #except:
-        #errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox)
+        time.sleep(1)
+        pygame.quit()
+    except:
+        errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox)
 
 
 
@@ -247,11 +245,13 @@ def loadNewSim():
     (but1,but2,but3,but4,but5) = (1,1,1,1,1)
     radioButtons = [but1,but2,but3,but4,but5]
     v = IntVar()
+    
     guessOptions = ["None","Horizontal displacement (m)","Total displacement (m)","Final vertical velocity (m/s)","Final total velocity (m/s)"]
     for i in range (0,len(radioButtons)):
         radioButtons[i] = Radiobutton(guiCanvas,text = guessOptions[i],variable =v,value = i+1)
         radioButtons[i].grid(row=7+i,column = 1)
         widgets.append(radioButtons[i])
+    v.set(1)
     
 
     guessEntryBox = Entry(guiCanvas,width = 20)
