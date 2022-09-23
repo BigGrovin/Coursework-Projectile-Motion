@@ -9,6 +9,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import math
 import GraphPage as graph
+from Main import Projectile
 
 #yucky yucky globals
 global widgets
@@ -16,8 +17,7 @@ global guiCanvas
 
 #save files
 class save:
-    def __init__(self,name,velocity,angle,gravity,height,circleSize):
-        self.name = name
+    def __init__(self,velocity,angle,gravity,height,circleSize):
         self.velocity=velocity
         self.angle=angle
         self.gravity=gravity
@@ -88,27 +88,7 @@ def runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,
         except:
             guess = 0
         (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
-        (circleXVelocity,circleYVelocity,radianAngle)= main.calculateVelocities(angle,velocity)
-        finalYVelocity = -1*(math.sqrt(circleYVelocity**2 + 2*gravity*height*-1))
-        (horiDistance,vertDistance)=main.calculateDistances(velocity,angle,gravity,height)
-        (xScales,yScales,multi) = main.calculateScale(horiDistance,vertDistance,height,circleSize)
-        (circleXVelocity,circleYVelocity,gravity,height) = main.scaleValues(circleXVelocity,circleYVelocity,gravity,multi,height)
-        circleSize = main.calculateCircleSize(circleSize,multi)
-        circleX = 0
-        circleY = circleSize + 0.0000000001 + height
-        first = True
-        while circleY > circleSize:
-            main.updateCircle(circleX,circleY,circleXVelocity,circleYVelocity,radianAngle,height,xScales,yScales,circleSize,finalYVelocity,multi,guess,whichGuess)
-            if first:
-                time.sleep(1)
-            first = False 
-            (circleX,circleY,circleXVelocity,circleYVelocity,radianAngle)= main.calculateCircle(circleX,circleY,circleXVelocity,circleYVelocity,0,gravity,0.35)
-        (addX,addY) = main.finalAdjustments(circleY,circleX,horiDistance,circleSize,multi)
-        circleX += addX/multi
-        circleY += addY
-        main.updateCircle(circleX,circleY,circleXVelocity,circleYVelocity,radianAngle,height,xScales,yScales,circleSize,finalYVelocity,multi,guess,whichGuess)
-        time.sleep(1)
-        pygame.quit()
+        main.runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height)
     except:
         errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox)
 

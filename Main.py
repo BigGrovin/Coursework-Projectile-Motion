@@ -1,16 +1,30 @@
 
 import pygame
 import math 
+import time
 from Engine import Engine
 engine = Engine()
 global screen
 playing = True
 engine.update_dt()
+
 #setup pygame window
 def draw():
     screen = pygame.display.set_mode((1540,820))
     screen.fill((255,255,255))
     return screen
+
+class Projectile:
+    def __init__ (self,velocity,angle,size,height,gravity):
+        self.radAngle = (angle*2*math.pi*360)
+        self.horiVelocity = (velocity * math.cos(self.radAngle * 2 * math.pi/360))
+        self.vertVelocity = (velocity * math.sin(self.radAngle * 2 * math.pi/360))
+        self.acceleration = gravity*-1
+        self.size = size
+        self.xPos = 0
+        self.yPos = size/2 + 0.0000000001 + height
+
+
 
 #calculate the max height and distance of projectile
 def calculateDistances(velocity,angle,gravity,height):
@@ -22,6 +36,39 @@ def calculateDistances(velocity,angle,gravity,height):
     timeOfVertDistance = (velocity*-1)/gravity
     vertDistance = (velocity * timeOfVertDistance + 0.5*gravity*timeOfVertDistance**2)+height
     return (horiDistance,vertDistance)
+
+#calculate new positions of circle subroutine
+def calculateCircle(X,Y,xVelocity,yVelocity,xAcceleration,yAcceleration,multi):
+    NradianAngle = (math.atan(yVelocity/xVelocity))
+    NcircleX = X +(xVelocity * engine.dt * multi)
+    NcircleY = Y +(yVelocity * engine.dt * multi)
+    NcircleXVelocity = xVelocity+(xAcceleration * engine.dt * multi)
+    NcircleYVelocity = yVelocity+(yAcceleration * engine.dt * multi)
+    return (NcircleX,NcircleY,NcircleXVelocity,NcircleYVelocity,NradianAngle)
+
+#calculates the scaled value of circle size
+def calculateCircleSize(circleSize,multi):
+    scaledCircleSize = circleSize/multi
+    return(scaledCircleSize)
+
+
+#calculate velocity components subroutine
+#vertical and horizontal components
+def calculateVelocities(angle,velocity):
+    radianAngle =  (float(angle) * 2 *(math.pi))/360
+    xVelocity = float(velocity) * (math.cos(radianAngle))
+    yVelocity = float(velocity) * (math.sin(radianAngle))
+    return (xVelocity,yVelocity,radianAngle)
+
+
+
+#final adjustments subroutine
+#figures out the final movements to make to the projectile
+def finalAdjustments(Y,circleX,horiDistance,circleSize,multi):
+    remainingY = circleSize-Y
+    remainingX = horiDistance - circleX*multi
+    return (remainingX,remainingY)
+
 
 #use distances to calculate required scale
 #this calculates the scales for the values and the scale in order to keep the projectile from going off screen
@@ -65,14 +112,6 @@ def checkGuess(screen,finalXVelocity,finalYVelocity,height,finalHoriDisplacement
         textBox.center = (750,400)
         screen.blit(text,textBox)
 
-#calculate new positions of circle subroutine
-def calculateCircle(X,Y,xVelocity,yVelocity,xAcceleration,yAcceleration,multi):
-    NradianAngle = (math.atan(yVelocity/xVelocity))
-    NcircleX = X +(xVelocity * engine.dt * multi)
-    NcircleY = Y +(yVelocity * engine.dt * multi)
-    NcircleXVelocity = xVelocity+(xAcceleration * engine.dt * multi)
-    NcircleYVelocity = yVelocity+(yAcceleration * engine.dt * multi)
-    return (NcircleX,NcircleY,NcircleXVelocity,NcircleYVelocity,NradianAngle)
 
 #draqs the background grid
 def drawBg(screen):
@@ -153,24 +192,30 @@ def updateCircle(circleX,circleY,circleXVelocity,circleYVelocity,radianAngle,hei
         checkGuess(screen,circleXVelocity,finalYVelocity,height,circleX,guess,v,multi)
     pygame.display.update()
 
-#calculates the scaled value of circle size
-def calculateCircleSize(circleSize,multi):
-    scaledCircleSize = circleSize/multi
-    return(scaledCircleSize)
+def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
+        projectile = Projectile(velocity,angle,gravity,height,circleSize)
+        (circleXVelocity,circleYVelocity,radianAngle)= calculateVelocities(angle,velocity)
+        finalYVelocity = -1*(math.sqrt(circleYVelocity**2 + 2*gravity*height*-1))
+        (horiDistance,vertDistance)=calculateDistances(velocity,angle,gravity,height)
+        (xScales,yScales,multi) = calculateScale(horiDistance,vertDistance,height,circleSize)
+        (circleXVelocity,circleYVelocity,gravity,height) = scaleValues(circleXVelocity,circleYVelocity,gravity,multi,height)
+        circleSize = calculateCircleSize(circleSize,multi)
+        circleX = 0
+        circleY = circleSize + 0.0000000001 + height
+        first = True
+        while circleY > circleSize:
+            updateCircle(circleX,circleY,circleXVelocity,circleYVelocity,radianAngle,height,xScales,yScales,circleSize,finalYVelocity,multi,guess,whichGuess)
+            if first:
+                time.sleep(1)
+            first = False 
+            (circleX,circleY,circleXVelocity,circleYVelocity,radianAngle)= calculateCircle(circleX,circleY,circleXVelocity,circleYVelocity,0,gravity,0.35)
+        (addX,addY) = finalAdjustments(circleY,circleX,horiDistance,circleSize,multi)
+        circleX += addX/multi
+        circleY += addY
+        updateCircle(circleX,circleY,circleXVelocity,circleYVelocity,radianAngle,height,xScales,yScales,circleSize,finalYVelocity,multi,guess,whichGuess)
+        time.sleep(1)
+        pygame.quit()
 
 
-#calculate velocity components subroutine
-def calculateVelocities(angle,velocity):
-    radianAngle =  (float(angle) * 2 *(math.pi))/360
-    xVelocity = float(velocity) * (math.cos(radianAngle))
-    yVelocity = float(velocity) * (math.sin(radianAngle))
-    return (xVelocity,yVelocity,radianAngle)
 
-
-
-#final adjustments subroutine
-def finalAdjustments(Y,circleX,horiDistance,circleSize,multi):
-    remainingY = circleSize-Y
-    remainingX = horiDistance - circleX*multi
-    return (remainingX,remainingY)
 
