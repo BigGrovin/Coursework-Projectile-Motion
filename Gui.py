@@ -81,16 +81,16 @@ def collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,
 
 #run simulation subroutine
 def runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox,v,guessEntryBox):
+    #try:
+    whichGuess = v.get()
     try:
-        whichGuess = v.get()
-        try:
-            guess = round(float(guessEntryBox.get()),1)
-        except:
-            guess = 0
-        (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
-        main.runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height)
+        guess = round(float(guessEntryBox.get()),1)
     except:
-        errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox)
+        guess = 0
+    (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
+    main.runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height)
+    #except:
+        #errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox)
 
 
 
