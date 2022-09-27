@@ -1,4 +1,3 @@
-
 import pygame
 import math 
 import time
@@ -50,6 +49,7 @@ def calculateCircle(projectile,xAcceleration,multi):
 #calculates the scaled value of circle size
 def calculateCircleSize(projectile,multi):
     scaledCircleSize = projectile.size/multi
+    projectile.yPos = scaledCircleSize + 0.00000001 + projectile.initialHeight
     return(scaledCircleSize)
 
 
@@ -136,7 +136,7 @@ def drawXText(screen,scales):
 
 #draw the projectile property values at the top right of the screen
 def drawValues(screen,multi,projectile):
-    tempFloatValues = [projectile.xPos,projectile.xPos - projectile.size-projectile.initialHeight,projectile.horiVelocity,projectile.vertVelocity]
+    tempFloatValues = [projectile.xPos,projectile.yPos - projectile.size-projectile.initialHeight,projectile.horiVelocity,projectile.vertVelocity]
     floatValues = [(value * multi)for value in tempFloatValues]
     valueNames = ["Horizontal displacement  =  ","Vertical displacement  =  ","Horizontal velocity  =  ","Vertical velocity  =  "]
     roundedValues = [round(value,3)for value in floatValues]
@@ -198,7 +198,7 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
             if first:
                 time.sleep(1)
             first = False 
-            (projectile.xPos,projectile.yPos,projectile.horiVelocity,projectile.vertVelocity,projectile.radAngle)= calculateCircle(projectile,0,0.35)
+            (projectile.xPos,projectile.yPos,projectile.horiVelocity,projectile.vertVelocity,projectile.radAngle)= calculateCircle(projectile,0,0.25)
         (addX,addY) = finalAdjustments(projectile,multi)
         projectile.xPos += addX/multi
         projectile.yPos += addY
