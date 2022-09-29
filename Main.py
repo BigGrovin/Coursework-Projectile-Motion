@@ -184,6 +184,23 @@ def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v):
         checkGuess(screen,finalYVelocity,projectile,guess,v,multi)
     pygame.display.update()
 
+
+def pause():
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
+                    paused = False
+                elif event.key == pygame.K_q:
+                    pygame.quit()
+                    quit()
+                    
+
+
 def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):   
         projectile = Projectile(velocity,angle,gravity,height,circleSize)
         print(projectile.acceleration)
