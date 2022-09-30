@@ -27,7 +27,10 @@ class Projectile:
         self.maxHoriDistance = 0
         self.maxVertDistance = 0
 
-
+class trailCircle:
+    def __init__ (self,xPos,yPos):
+        self.xPos = xPos
+        self.yPos = yPos
 
 #calculate the max height and distance of projectile
 def calculateDistances(projectile,finalVerticalVelocity):
@@ -162,9 +165,14 @@ def drawFinalVelocity(screen,circleYVelocity):
     screen.blit(text,textBox)
 
 #draw repositioned circle subroutine
-def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v):
-    screen = draw()
+def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v,screen,trailCounter,trails,currentTrailCounter):
     drawBg(screen)
+    if round(projectile.xPos,0) > currentTrailCounter:
+        trail = trailCircle(projectile.xPos,projectile.yPos)
+        trails.append(trail) 
+        currentTrailCounter += trailCounter
+    for trail in trails:
+        pygame.draw.circle(screen,(42,56,14),(trail.xPos,820-trail.yPos),2)
     pygame.draw.rect(screen,(0,10,10),(0,820-projectile.initialHeight,20,projectile.initialHeight))
     pygame.draw.circle(screen,(17,59,121),(projectile.xPos,820-projectile.yPos),(projectile.size))
     pygame.draw.line(screen,(0,255,0),(projectile.xPos,820-projectile.yPos),(projectile.xPos + projectile.horiVelocity,820-projectile.yPos),width = 2)
@@ -183,6 +191,10 @@ def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v):
         drawFinalVelocity(screen,finalYVelocity)
         checkGuess(screen,finalYVelocity,projectile,guess,v,multi)
     pygame.display.update()
+    try:
+        return(trails,currentTrailCounter)
+    except:
+        pass
 
 
 def pause():
@@ -201,7 +213,8 @@ def pause():
                     
 
 
-def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):   
+def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
+        screen = draw()
         projectile = Projectile(velocity,angle,gravity,height,circleSize)
         print(projectile.acceleration)
         finalYVelocity = -1*(math.sqrt(projectile.vertVelocity**2 - 2 * projectile.acceleration * projectile.initialHeight))
@@ -210,8 +223,16 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         (projectile.horiVelocity,projectile.vertVelocity,projectile.acceleration,projectile.initialHeight) = scaleValues(projectile,multi)        
         projectile.size = calculateCircleSize(projectile,multi)
         first = True
+        trailCounter = round((projectile.maxHoriDistance / multi)/100,0)
+        currentTrailCounter = trailCounter
+        trails = []
+        print (trailCounter)
         while projectile.yPos > projectile.size:
-            updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,whichGuess)
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_c:
+                        pause()
+            (trails,currentTrailCounter) = (updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,whichGuess,screen,trailCounter,trails,currentTrailCounter))
             if first:
                 time.sleep(1)
             first = False 
@@ -219,7 +240,7 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         (addX,addY) = finalAdjustments(projectile,multi)
         projectile.xPos += addX/multi
         projectile.yPos += addY
-        updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,whichGuess)
+        (trails,currentTrailCounter) = (updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,whichGuess,screen,trailCounter,trails,currentTrailCounter))
         time.sleep(1)
         pygame.quit()
 
