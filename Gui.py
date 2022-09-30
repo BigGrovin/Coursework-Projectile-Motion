@@ -17,7 +17,8 @@ global guiCanvas
 
 #save files
 class save:
-    def __init__(self,velocity,angle,gravity,height,circleSize):
+    def __init__(self,name,velocity,angle,gravity,height,circleSize):
+        self.name = name
         self.velocity=velocity
         self.angle=angle
         self.gravity=gravity

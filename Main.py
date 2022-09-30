@@ -167,7 +167,7 @@ def drawFinalVelocity(screen,circleYVelocity):
 #draw repositioned circle subroutine
 def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v,screen,trailCounter,trails,currentTrailCounter):
     drawBg(screen)
-    if round(projectile.xPos,0) > currentTrailCounter:
+    if (projectile.xPos) > currentTrailCounter:
         trail = trailCircle(projectile.xPos,projectile.yPos)
         trails.append(trail) 
         currentTrailCounter += trailCounter
@@ -223,7 +223,7 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         (projectile.horiVelocity,projectile.vertVelocity,projectile.acceleration,projectile.initialHeight) = scaleValues(projectile,multi)        
         projectile.size = calculateCircleSize(projectile,multi)
         first = True
-        trailCounter = round((projectile.maxHoriDistance / multi)/100,0)
+        trailCounter = ((projectile.maxHoriDistance / multi)/100)
         currentTrailCounter = trailCounter
         trails = []
         print (trailCounter)
