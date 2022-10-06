@@ -89,8 +89,8 @@ def scaleValues(projectile,multi):
 #display whether they are right on screen
 def checkGuess(screen,finalYVelocity,projectile,guess,v,multi):
     finalVelocity = round(math.sqrt(finalYVelocity**2+projectile.horiVelocity**2),1)
-    finalDisplacement = round((math.sqrt(projectile.initialHeight**2+projectile.maxHoriDistance**2))*multi,1)
-    finalHoriDisplacement = round((projectile.maxHoriDistance)*multi,1)
+    finalDisplacement = round((math.sqrt(projectile.initialHeight**2+projectile.maxHoriDistance**2)),1)
+    finalHoriDisplacement = round((projectile.maxHoriDistance),1)
     finalYVelocity = round(finalYVelocity,1)
     answers = [finalHoriDisplacement,finalDisplacement,finalYVelocity,finalVelocity]
     if v != 1:
@@ -223,7 +223,7 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         (projectile.horiVelocity,projectile.vertVelocity,projectile.acceleration,projectile.initialHeight) = scaleValues(projectile,multi)        
         projectile.size = calculateCircleSize(projectile,multi)
         first = True
-        trailCounter = ((projectile.maxHoriDistance / multi)/1000)
+        trailCounter = ((projectile.maxHoriDistance / multi)/100)
         currentTrailCounter = trailCounter
         trails = []
         print (trailCounter)

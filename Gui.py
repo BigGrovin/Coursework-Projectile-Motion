@@ -150,6 +150,7 @@ def loadNewSim():
     angleTextBox.insert("1.0","Angle of Launch")
     angleTextBox.tag_add("center","1.0","end")
     angleTextBox.grid(row=0,column=0)
+    angleTextBox.config(state=DISABLED)
 
 
     velocityEntryBox = Entry(guiCanvas,width=20,validate="focusout")
@@ -163,6 +164,7 @@ def loadNewSim():
     velocityTextBox.insert("1.0","Initial Velocity (U)(m/s)")
     velocityTextBox.tag_add("center","1.0","end")
     velocityTextBox.grid(row=0,column=4)
+    velocityTextBox.config(state=DISABLED)
 
 
     gravityEntryBox = Entry(guiCanvas,width=20,validate="focusout")
@@ -176,6 +178,7 @@ def loadNewSim():
     gravityTextBox.insert("1.0","Acceleration due to gravity (m/s^2)")
     gravityTextBox.tag_add("center","1.0","end")
     gravityTextBox.grid(row=2,column=4)
+    gravityTextBox.config(state=DISABLED)
 
 
     heightEntryBox = Entry(guiCanvas,width = 20,validate="focusout")
@@ -189,6 +192,7 @@ def loadNewSim():
     heightTextBox.insert("1.0","Initial height (m)")
     heightTextBox.tag_add("center","1.0","end")
     heightTextBox.grid(row=2,column=0)
+    heightTextBox.config(state=DISABLED)
 
 
     circleSizeEntryBox = Entry(guiCanvas,width=20,validate="focusout")
@@ -202,6 +206,7 @@ def loadNewSim():
     circleSizeTextBox.insert("1.0","Radius of projectile (m)")
     circleSizeTextBox.tag_add("center","1.0","end")
     circleSizeTextBox.grid(row=4,column=0)
+    circleSizeTextBox.config(state=DISABLED)
 
 
     velocityGraphBut = Button(guiCanvas,text="Draw Velocity-Time Graph",activebackground="green",height = 2,width=20,command= lambda: velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
@@ -245,6 +250,7 @@ def loadNewSim():
     guessTextBox.insert("1.0","Which value would you like to guess?")
     guessTextBox.tag_add("center","1.0","end")
     guessTextBox.grid(row=7,column=0)
+    guessTextBox.config(state=DISABLED)
 
 
     runBut=Button(guiCanvas,text="Run Simulation",activebackground="green",height=2,width=20,command= lambda: runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox,v,guessEntryBox))
