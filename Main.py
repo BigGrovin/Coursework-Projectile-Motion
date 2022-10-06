@@ -95,7 +95,7 @@ def checkGuess(screen,finalYVelocity,projectile,guess,v,multi):
     answers = [finalHoriDisplacement,finalDisplacement,finalYVelocity,finalVelocity]
     if v != 1:
         pygame.font.init()
-        font = pygame.font.SysFont("Arial",50)
+        font = pygame.font.SysFont("Roboto",40)
         if guess == answers[v-2]:
             text = font.render("Correct Answer!!",True,(0,0,0),(255,255,255))
         else:
@@ -156,6 +156,15 @@ def drawValues(screen,multi,projectile):
         textBox.center = (1450,(i+2)*20)
         screen.blit(text,textBox)
 
+
+def drawCenterText(screen,text):
+    pygame.font.init()
+    font = pygame.font.SysFont("Roboto",50)
+    text = font.render(text,True,(0,0,0),(255,255,255))
+    textBox = text.get_rect()
+    textBox.center = (750,100)
+    screen.blit(text,textBox)
+
 def drawFinalVelocity(screen,circleYVelocity):
     pygame.font.init()
     font = pygame.font.SysFont("Arial",20)
@@ -190,6 +199,9 @@ def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v,screen,
     if  projectile.yPos - projectile.size == 0:
         drawFinalVelocity(screen,finalYVelocity)
         checkGuess(screen,finalYVelocity,projectile,guess,v,multi)
+    else:
+        if len(trails) > 0:
+            drawCenterText(screen,"Space to pause[Q to quit]")
     pygame.display.update()
     try:
         return(trails,currentTrailCounter)
@@ -203,13 +215,12 @@ def pause():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_c:
+                if event.key == pygame.K_SPACE:
                     paused = False
                 elif event.key == pygame.K_q:
                     pygame.quit()
-                    quit()
+
                     
 
 
@@ -230,18 +241,24 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         while projectile.yPos > projectile.size:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_c:
+                    if event.key == pygame.K_SPACE:
                         pause()
+                    if event.key == pygame.K_q:
+                        pygame.quit()
             (trails,currentTrailCounter) = (updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,whichGuess,screen,trailCounter,trails,currentTrailCounter))
             if first:
-                time.sleep(1)
+                drawCenterText(screen,"[Space to start][Q to quit]")
+                pygame.display.update()
+                pause()
             first = False 
             (projectile.xPos,projectile.yPos,projectile.horiVelocity,projectile.vertVelocity,projectile.radAngle)= calculateCircle(projectile,0,0.25)
         (addX,addY) = finalAdjustments(projectile,multi)
         projectile.xPos += addX/multi
         projectile.yPos += addY
         (trails,currentTrailCounter) = (updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,whichGuess,screen,trailCounter,trails,currentTrailCounter))
-        time.sleep(1)
+        drawCenterText(screen,"[Space to finish][Q to quit]")
+        pygame.display.update()
+        pause()
         pygame.quit()
 
 
