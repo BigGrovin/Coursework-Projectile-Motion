@@ -223,7 +223,7 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         (projectile.horiVelocity,projectile.vertVelocity,projectile.acceleration,projectile.initialHeight) = scaleValues(projectile,multi)        
         projectile.size = calculateCircleSize(projectile,multi)
         first = True
-        trailCounter = ((projectile.maxHoriDistance / multi)/100)
+        trailCounter = ((projectile.maxHoriDistance / multi)/1000)
         currentTrailCounter = trailCounter
         trails = []
         print (trailCounter)
