@@ -25,14 +25,19 @@ class save:
         self.height=height
         self.circleSize=circleSize
 
-savesList = []
-    
+
 #create save subroutine
 def createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,saveNameEntryBox,circleSizeEntryBox):
     (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
     name = saveNameEntryBox.get()
     if name != "":
-        savesList.append(save(name,velocity,angle,gravity,height,circleSize))
+        savesDict = {
+            "initial velocity" : velocity,
+            "initial angle" : angle,
+            "gravity" : gravity,
+            "initial height" : height,
+            "circle size" : circleSize
+        }
         if len(widgets) > 23:
             widgets.pop(-1).grid_remove()
     else:
@@ -43,9 +48,11 @@ def createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,sav
             nameErrorTextBox.insert("1.0","ERROR! Invalid Name")
             nameErrorTextBox.tag_add("center","1.0","end")
             nameErrorTextBox.grid(row=8,column=4)
+            nameErrorTextBox.config(state=DISABLED)
 
 
 #list of widgets
+#used to store all the widgets currently on the screen, used to delete them so new ones can be drawn
 widgets = []
 
 #Create the main frame
@@ -82,21 +89,21 @@ def collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,
 
 #run simulation subroutine
 def runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox,v,guessEntryBox):
-    #try:
-    whichGuess = v.get()
     try:
-        guess = round(float(guessEntryBox.get()),1)
+        whichGuess = v.get()
+        try:
+            guess = round(float(guessEntryBox.get()),1)
+        except:
+            guess = 0
+        (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
+        main.runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height)
     except:
-        guess = 0
-    (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
-    main.runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height)
-    #except:
-        #errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox)
+        errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
 
 
 
 #display error in input boxes if invalid entry
-def errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox):
+def errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox):
     try:
         x = float(velocityEntryBox.get())
     except:
@@ -117,6 +124,11 @@ def errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox):
     except:
         heightEntryBox.delete(0,last=99999)
         heightEntryBox.insert(0,"Invalid Input")
+    try:
+        x = float(circleSizeEntryBox.get())
+    except:
+        circleSizeEntryBox.delete(0,last=99999)
+        circleSizeEntryBox.insert(0,"InvalidInput")
 
 #draw graph subroutines
 def velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox):

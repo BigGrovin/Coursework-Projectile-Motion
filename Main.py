@@ -1,9 +1,9 @@
+#imports
 import pygame
 import math 
 import time
 from Engine import Engine
 engine = Engine()
-global screen
 playing = True
 engine.update_dt()
 
@@ -13,6 +13,7 @@ def draw():
     screen.fill((255,255,255))
     return screen
 
+#defines class for the projectile so it can be used throughout
 class Projectile:
     def __init__ (self,velocity,angle,gravity,height,size):
         self.radAngle = (angle*2*math.pi/360)
@@ -27,6 +28,7 @@ class Projectile:
         self.maxHoriDistance = 0
         self.maxVertDistance = 0
 
+#defines class for the circles that make up the balls trail
 class trailCircle:
     def __init__ (self,xPos,yPos):
         self.xPos = xPos
@@ -156,15 +158,16 @@ def drawValues(screen,multi,projectile):
         textBox.center = (1450,(i+2)*20)
         screen.blit(text,textBox)
 
-
+#draws text in the top center of screen
 def drawCenterText(screen,text):
     pygame.font.init()
     font = pygame.font.SysFont("Roboto",50)
     text = font.render(text,True,(0,0,0),(255,255,255))
     textBox = text.get_rect()
     textBox.center = (750,100)
-    screen.blit(text,textBox)
+    screen.blit(text,textBox) 
 
+#displays the final values of velocity etc on the screen atg the end of the subroutine
 def drawFinalVelocity(screen,circleYVelocity):
     pygame.font.init()
     font = pygame.font.SysFont("Arial",20)
@@ -208,7 +211,7 @@ def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v,screen,
     except:
         pass
 
-
+#pause the simulation subroutine
 def pause():
     paused = True
     while paused:
@@ -216,17 +219,16 @@ def pause():
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE: #stays paused until space is hit
                     paused = False
-                elif event.key == pygame.K_q:
+                elif event.key == pygame.K_q: #quit simulation if q is hit
                     pygame.quit()
 
                     
-
-
+#runs the simulation from button press in GUI
 def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         screen = draw()
-        projectile = Projectile(velocity,angle,gravity,height,circleSize)
+        projectile = Projectile(velocity,angle,gravity,height,circleSize) #creates projectile object
         print(projectile.acceleration)
         finalYVelocity = -1*(math.sqrt(projectile.vertVelocity**2 - 2 * projectile.acceleration * projectile.initialHeight))
         (projectile.maxHoriDistance,projectile.maxVertDistance)=calculateDistances(projectile,finalYVelocity)
@@ -246,7 +248,7 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
                     if event.key == pygame.K_q:
                         pygame.quit()
             (trails,currentTrailCounter) = (updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,whichGuess,screen,trailCounter,trails,currentTrailCounter))
-            if first:
+            if first: #only does this part once (at the start)
                 drawCenterText(screen,"[Space to start][Q to quit]")
                 pygame.display.update()
                 pause()
