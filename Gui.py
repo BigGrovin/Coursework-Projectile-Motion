@@ -10,6 +10,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import math
 import GraphPage as graph
 from Main import Projectile
+import json as jason
 
 #yucky yucky globals
 global widgets
@@ -26,30 +27,43 @@ class save:
         self.circleSize=circleSize
 
 
+
 #create save subroutine
 def createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,saveNameEntryBox,circleSizeEntryBox):
-    (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
-    name = saveNameEntryBox.get()
-    if name != "":
-        savesDict = {
-            "initial velocity" : velocity,
-            "initial angle" : angle,
-            "gravity" : gravity,
-            "initial height" : height,
-            "circle size" : circleSize
-        }
-        if len(widgets) > 23:
-            widgets.pop(-1).grid_remove()
-    else:
-        if len(widgets) < 24:
-            nameErrorTextBox = Text(guiCanvas, height = 2, width = 20,bg="CYAN",borderwidth=0,font="Roboto")
-            nameErrorTextBox.tag_configure("center",justify = "center")
-            widgets.append(nameErrorTextBox)
-            nameErrorTextBox.insert("1.0","ERROR! Invalid Name")
-            nameErrorTextBox.tag_add("center","1.0","end")
-            nameErrorTextBox.grid(row=8,column=4)
-            nameErrorTextBox.config(state=DISABLED)
-
+    try:
+        (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
+        name = saveNameEntryBox.get()
+        if name != "":
+            savesDict = {
+                "name" : name,
+                "initial velocity" : velocity,
+                "initial angle" : angle,
+                "gravity" : gravity,
+                "initial height" : height,
+                "circle size" : circleSize
+            }
+            with open("saves.json","r")as saveFile:
+                try:
+                    data = jason.load(saveFile)
+                except:
+                    data = []
+                    pass
+                data.append(savesDict)
+            with open("saves.json","w")as saveFile:
+                jason.dump(data, saveFile, indent=2)
+            if len(widgets) > 23:
+                widgets.pop(-1).grid_remove()
+        else:
+            if len(widgets) < 24:
+                nameErrorTextBox = Text(guiCanvas, height = 2, width = 20,bg="CYAN",borderwidth=0,font="Roboto")
+                nameErrorTextBox.tag_configure("center",justify = "center")
+                widgets.append(nameErrorTextBox)
+                nameErrorTextBox.insert("1.0","ERROR! Invalid Name")
+                nameErrorTextBox.tag_add("center","1.0","end")
+                nameErrorTextBox.grid(row=8,column=4)
+                nameErrorTextBox.config(state=DISABLED)
+    except:
+        errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
 
 #list of widgets
 #used to store all the widgets currently on the screen, used to delete them so new ones can be drawn
@@ -274,6 +288,12 @@ def loadNewSim():
     widgets.append(menuBut)
 
     guiCanvas.pack()
+
+
+#load a saved simualtion menu
+def loadSavedSim():
+    
+
 
 #Delete all buttons subroutine
 def deleteWids():
