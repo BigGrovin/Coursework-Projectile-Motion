@@ -1,4 +1,5 @@
 #imports
+from functools import partial
 from tkinter import *
 import time
 import Main as main
@@ -82,7 +83,7 @@ guiCanvas = Canvas(frame,bg = "cyan",height="800",width="1400")
 def loadMain():
     deleteWids()
     newSimBut = Button(guiCanvas,text="Create New Simulation",activebackground="green",height=7,width=20, command = loadNewSim)
-    savedSimsBut = Button(guiCanvas,text="Saved Simulations",activebackground="green",height=7,width=20)
+    savedSimsBut = Button(guiCanvas,text="Saved Simulations",activebackground="green",height=7,width=20, command = loadSavedSim)
     widgets.append(newSimBut)
     widgets.append(savedSimsBut)
     newSimBut.grid(row=1,column=1,padx=20,pady=20)
@@ -292,8 +293,35 @@ def loadNewSim():
 
 #load a saved simualtion menu
 def loadSavedSim():
-    
+    deleteWids()
+    with open("saves.json","r")as saveFile:
+        try:
+            data = jason.load(saveFile)
+        except:
+            data = []
+    saveOptions = [d["name"]for d in data]
 
+    saveChoiceValue = StringVar()
+    saveChoiceDropDown = OptionMenu(guiCanvas,saveChoiceValue, *saveOptions)
+    saveChoiceDropDown.grid(row = 1,column = 1)
+    widgets.append(saveChoiceDropDown)
+
+    menuBut = Button(guiCanvas,text="Back to menu",activebackground="green",height=2,width=20,command = loadMain)
+    menuBut.grid(row=0,column=2,padx=10)
+    widgets.append(menuBut)
+
+    runBut = Button(guiCanvas,text = "Run saved simulation",activebackground = "green",height = 2, width = 20,command = partial(runSavedSim,saveChoiceValue))
+    runBut.grid(row = 1,column = 0,padx=10)
+    widgets.append(runBut)
+
+def runSavedSim(saveName):
+    saveName = saveName.get()
+    with open("saves.json","r") as saveFile:
+        data = jason.load(saveFile)
+        saveValues = next((item for item in data if item["name"] == saveName), None)
+        (name,velocity,angle,gravity,height,circleSize) = saveValues.values()
+        main.runItAll(1,velocity,angle,1,circleSize,gravity,height)
+    
 
 #Delete all buttons subroutine
 def deleteWids():
