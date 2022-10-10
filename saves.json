@@ -24,11 +24,11 @@
     "circle size": 200.0
   },
   {
-    "name": "tys save",
-    "initial velocity": 50.0,
-    "initial angle": 45.0,
-    "gravity": -10.0,
+    "name": "Sam",
+    "initial velocity": 987654321.0,
+    "initial angle": 85.0,
+    "gravity": -98765000.0,
     "initial height": 0.0,
-    "circle size": 20.0
+    "circle size": 100000.0
   }
 ]
