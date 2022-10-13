@@ -1,7 +1,6 @@
 #imports
 import pygame
 import math 
-import time
 from Engine import Engine
 engine = Engine()
 playing = True

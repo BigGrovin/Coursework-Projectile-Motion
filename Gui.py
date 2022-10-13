@@ -1,7 +1,6 @@
 #imports
 from functools import partial
 from tkinter import *
-import time
 import Main as main
 import pygame
 import matplotlib.pyplot as plt

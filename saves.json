@@ -30,5 +30,13 @@
     "gravity": -98765000.0,
     "initial height": 0.0,
     "circle size": 100000.0
+  },
+  {
+    "name": "save million",
+    "initial velocity": 50.0,
+    "initial angle": 45.0,
+    "gravity": -10.0,
+    "initial height": 0.0,
+    "circle size": 20.0
   }
 ]
