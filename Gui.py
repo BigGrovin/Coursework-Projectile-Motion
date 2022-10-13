@@ -120,27 +120,27 @@ def runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,
 #display error in input boxes if invalid entry
 def errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox):
     try:
-        x = float(velocityEntryBox.get())
+        numCheck = float(velocityEntryBox.get())
     except:
         velocityEntryBox.delete(0,last=99999)
         velocityEntryBox.insert(0,"Invalid Input")
     try:
-        x = float(angleEntryBox.get())
+        numCheck = float(angleEntryBox.get())
     except:
         angleEntryBox.delete(0,last=99999)
         angleEntryBox.insert(0,"Invalid Input")
     try:
-        x = float(gravityEntryBox.get())
+        numCheck = float(gravityEntryBox.get())
     except:
         gravityEntryBox.delete(0,last=99999)
         gravityEntryBox.insert(0,"Invalid Input")
     try:
-        x = float(heightEntryBox.get())
+        numCheck = float(heightEntryBox.get())
     except:
         heightEntryBox.delete(0,last=99999)
         heightEntryBox.insert(0,"Invalid Input")
     try:
-        x = float(circleSizeEntryBox.get())
+        numCheck = float(circleSizeEntryBox.get())
     except:
         circleSizeEntryBox.delete(0,last=99999)
         circleSizeEntryBox.insert(0,"InvalidInput")

@@ -89,19 +89,19 @@ def scaleValues(projectile,multi):
 
 #check whether their guess is equal to the answer
 #display whether they are right on screen
-def checkGuess(screen,finalYVelocity,projectile,guess,v,multi):
+def checkGuess(screen,finalYVelocity,projectile,guess,optionNum,multi):
     finalVelocity = round(math.sqrt(finalYVelocity**2+projectile.horiVelocity**2),1)
     finalDisplacement = round((math.sqrt(projectile.initialHeight**2+projectile.maxHoriDistance**2)),1)
     finalHoriDisplacement = round((projectile.maxHoriDistance),1)
     finalYVelocity = round(finalYVelocity,1)
     answers = [finalHoriDisplacement,finalDisplacement,finalYVelocity,finalVelocity]
-    if v != 1:
+    if optionNum != 1:
         pygame.font.init()
         font = pygame.font.SysFont("Roboto",40)
-        if guess == answers[v-2]:
+        if guess == answers[optionNum-2]:
             text = font.render("Correct Answer!!",True,(0,0,0),(255,255,255))
         else:
-            answerText = str(answers[v-2])
+            answerText = str(answers[optionNum-2])
             incorrectText = ("Incorrect, correct answer was: ")
             totalText = (incorrectText + answerText)
             text = font.render(totalText,True,(0,0,0),(255,255,255))
