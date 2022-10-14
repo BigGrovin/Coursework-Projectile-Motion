@@ -184,6 +184,7 @@ def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v,screen,
         currentTrailCounter += trailCounter
     for trail in trails:
         pygame.draw.circle(screen,(42,56,14),(trail.xPos,820-trail.yPos),2)
+    pygame.draw.rect(screen,(255,255,255),(0,0,1540,20))
     pygame.draw.rect(screen,(0,10,10),(0,820-projectile.initialHeight,20,projectile.initialHeight))
     pygame.draw.circle(screen,(17,59,121),(projectile.xPos,820-projectile.yPos),(projectile.size))
     pygame.draw.line(screen,(0,255,0),(projectile.xPos,820-projectile.yPos),(projectile.xPos + projectile.horiVelocity,820-projectile.yPos),width = 2)

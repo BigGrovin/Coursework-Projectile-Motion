@@ -306,11 +306,11 @@ def loadSavedSim():
     widgets.append(saveChoiceDropDown)
 
     menuBut = Button(guiCanvas,text="Back to menu",activebackground="green",height=2,width=20,command = loadMain)
-    menuBut.grid(row=0,column=2,padx=10)
+    menuBut.grid(row=0,column=1,padx=10)
     widgets.append(menuBut)
 
     runBut = Button(guiCanvas,text = "Run saved simulation",activebackground = "green",height = 2, width = 20,command = partial(runSavedSim,saveChoiceValue))
-    runBut.grid(row = 1,column = 0,padx=10)
+    runBut.grid(row = 2,column = 1,padx=10)
     widgets.append(runBut)
 
 def runSavedSim(saveName):
