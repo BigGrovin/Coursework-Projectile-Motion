@@ -51,10 +51,10 @@ def createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,sav
                 data.append(savesDict)
             with open("saves.json","w")as saveFile:
                 jason.dump(data, saveFile, indent=2)
-            if len(widgets) > 23:
+            if len(widgets) > 25:
                 widgets.pop(-1).grid_remove()
         else:
-            if len(widgets) < 24:
+            if len(widgets) < 26:
                 nameErrorTextBox = Text(guiCanvas, height = 2, width = 20,bg="CYAN",borderwidth=0,font="Roboto")
                 nameErrorTextBox.tag_configure("center",justify = "center")
                 widgets.append(nameErrorTextBox)
@@ -234,6 +234,19 @@ def loadNewSim():
     circleSizeTextBox.grid(row=4,column=0)
     circleSizeTextBox.config(state=DISABLED)
 
+
+    massEntryBox = Entry(guiCanvas,width=20)
+    massEntryBox.insert(0,"20")
+    massEntryBox.grid(row=5,column=3)
+    widgets.append(massEntryBox)
+
+    massTextBox = Text(guiCanvas,height=2,width=30,bg="CYAN",borderwidth=0,font="Roboto")
+    massTextBox.tag_configure("center",justify = "center")
+    widgets.append(massTextBox)
+    massTextBox.insert("1.0","Mass of projectile (Kg)")
+    massTextBox.tag_add("center","1.0","end")
+    massTextBox.grid(row=4,column=4)
+    massTextBox.config(state=DISABLED)
 
     velocityGraphBut = Button(guiCanvas,text="Draw Velocity-Time Graph",activebackground="green",height = 2,width=20,command= lambda: velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
     velocityGraphBut.grid(row=6,column=2,padx=10)
