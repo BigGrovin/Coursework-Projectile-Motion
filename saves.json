@@ -38,5 +38,13 @@
     "gravity": -10.0,
     "initial height": 0.0,
     "circle size": 20.0
+  },
+  {
+    "name": "Ben's Sim",
+    "initial velocity": 1900.0,
+    "initial angle": 30.0,
+    "gravity": -9.81,
+    "initial height": 2.0,
+    "circle size": 5.0
   }
 ]
