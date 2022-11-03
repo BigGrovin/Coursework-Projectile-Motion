@@ -11,6 +11,7 @@ import math
 import GraphPage as graph
 from Main import Projectile
 import json as jason
+import tkinter.ttk as ttk
 
 #yucky yucky globals
 global widgets
@@ -175,7 +176,7 @@ def loadNewSim():
     widgets.append(angleTextBox)
     angleTextBox.insert("1.0","Angle of Launch")
     angleTextBox.tag_add("center","1.0","end")
-    angleTextBox.grid(row=0,column=0)
+    angleTextBox.grid(row=1,column=0)
     angleTextBox.config(state=DISABLED)
 
 
@@ -189,7 +190,7 @@ def loadNewSim():
     widgets.append(velocityTextBox)
     velocityTextBox.insert("1.0","Initial Velocity (U)(m/s)")
     velocityTextBox.tag_add("center","1.0","end")
-    velocityTextBox.grid(row=0,column=4)
+    velocityTextBox.grid(row=1,column=4)
     velocityTextBox.config(state=DISABLED)
 
 
@@ -203,7 +204,7 @@ def loadNewSim():
     widgets.append(gravityTextBox)
     gravityTextBox.insert("1.0","Acceleration due to gravity (m/s^2)")
     gravityTextBox.tag_add("center","1.0","end")
-    gravityTextBox.grid(row=2,column=4)
+    gravityTextBox.grid(row=3,column=4)
     gravityTextBox.config(state=DISABLED)
 
 
@@ -217,7 +218,7 @@ def loadNewSim():
     widgets.append(heightTextBox)
     heightTextBox.insert("1.0","Initial height (m)")
     heightTextBox.tag_add("center","1.0","end")
-    heightTextBox.grid(row=2,column=0)
+    heightTextBox.grid(row=3,column=0)
     heightTextBox.config(state=DISABLED)
 
 
@@ -231,7 +232,7 @@ def loadNewSim():
     widgets.append(circleSizeTextBox)
     circleSizeTextBox.insert("1.0","Radius of projectile (m)")
     circleSizeTextBox.tag_add("center","1.0","end")
-    circleSizeTextBox.grid(row=4,column=0)
+    circleSizeTextBox.grid(row=5,column=0)
     circleSizeTextBox.config(state=DISABLED)
 
 
@@ -245,7 +246,7 @@ def loadNewSim():
     widgets.append(massTextBox)
     massTextBox.insert("1.0","Mass of projectile (Kg)")
     massTextBox.tag_add("center","1.0","end")
-    massTextBox.grid(row=4,column=4)
+    massTextBox.grid(row=5,column=4)
     massTextBox.config(state=DISABLED)
 
     velocityGraphBut = Button(guiCanvas,text="Draw Velocity-Time Graph",activebackground="green",height = 2,width=20,command= lambda: velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
@@ -314,16 +315,16 @@ def loadSavedSim():
     saveOptions = [d["name"]for d in data]
 
     saveChoiceValue = StringVar()
-    saveChoiceDropDown = OptionMenu(guiCanvas,saveChoiceValue, *saveOptions)
+    saveChoiceDropDown = ttk.Combobox(guiCanvas,values = saveOptions, state = "readonly", textvariable = saveChoiceValue, font = "Roboto")
     saveChoiceDropDown.grid(row = 1,column = 1)
     widgets.append(saveChoiceDropDown)
 
-    menuBut = Button(guiCanvas,text="Back to menu",activebackground="green",height=2,width=20,command = loadMain)
-    menuBut.grid(row=0,column=1,padx=10)
+    menuBut = Button(guiCanvas,text="Back to menu",activebackground="green",height=2,width=33,command = loadMain)
+    menuBut.grid(row=0,column=1,padx=10,pady=10)
     widgets.append(menuBut)
 
-    runBut = Button(guiCanvas,text = "Run saved simulation",activebackground = "green",height = 2, width = 20,command = partial(runSavedSim,saveChoiceValue))
-    runBut.grid(row = 2,column = 1,padx=10)
+    runBut = Button(guiCanvas,text = "Run saved simulation",activebackground = "green",height = 2, width = 33,command = partial(runSavedSim,saveChoiceValue))
+    runBut.grid(row = 2,column = 1,padx=10,pady=10)
     widgets.append(runBut)
 
 def runSavedSim(saveName):
