@@ -46,5 +46,21 @@
     "gravity": -9.81,
     "initial height": 2.0,
     "circle size": 5.0
+  },
+  {
+    "name": "Elliott Smells",
+    "initial velocity": 500.0,
+    "initial angle": 80.0,
+    "gravity": -200.0,
+    "initial height": 200.0,
+    "circle size": 20.0
+  },
+  {
+    "name": "Save 3",
+    "initial velocity": 50.0,
+    "initial angle": 45.0,
+    "gravity": -10.0,
+    "initial height": 0.0,
+    "circle size": 20.0
   }
 ]

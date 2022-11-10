@@ -123,27 +123,27 @@ def errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,c
         numCheck = float(velocityEntryBox.get())
     except:
         velocityEntryBox.delete(0,last=99999)
-        velocityEntryBox.insert(0,"Invalid Input")
+        velocityEntryBox.insert(0,"Please enter a number")
     try:
         numCheck = float(angleEntryBox.get())
     except:
         angleEntryBox.delete(0,last=99999)
-        angleEntryBox.insert(0,"Invalid Input")
+        angleEntryBox.insert(0,"Please enter a number")
     try:
         numCheck = float(gravityEntryBox.get())
     except:
         gravityEntryBox.delete(0,last=99999)
-        gravityEntryBox.insert(0,"Invalid Input")
+        gravityEntryBox.insert(0,"Please enter a number")
     try:
         numCheck = float(heightEntryBox.get())
     except:
         heightEntryBox.delete(0,last=99999)
-        heightEntryBox.insert(0,"Invalid Input")
+        heightEntryBox.insert(0,"Please enter a number")
     try:
         numCheck = float(circleSizeEntryBox.get())
     except:
         circleSizeEntryBox.delete(0,last=99999)
-        circleSizeEntryBox.insert(0,"InvalidInput")
+        circleSizeEntryBox.insert(0,"Please enter a number")
 
 #draw graph subroutines
 def velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox):
@@ -165,7 +165,8 @@ def displacementGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntry
 #Load new simulation subroutine
 def loadNewSim():
     deleteWids()
-
+#this just creates all the buttons and entry boxes
+#puts each of them in a grid, all with the same font
     angleEntryBox = Entry(guiCanvas,width=20,validate = "focusout")
     angleEntryBox.insert(0,"45")
     angleEntryBox.grid(row=1,column=1)
@@ -249,10 +250,12 @@ def loadNewSim():
     massTextBox.grid(row=5,column=4)
     massTextBox.config(state=DISABLED)
 
+    #button to call the drawVelocityGraph function
     velocityGraphBut = Button(guiCanvas,text="Draw Velocity-Time Graph",activebackground="green",height = 2,width=20,command= lambda: velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
     velocityGraphBut.grid(row=6,column=2,padx=10)
     widgets.append(velocityGraphBut)
 
+    #button to call the drawDisplacementGraph function
     displacementGraphBut = Button(guiCanvas,text = "Draw Displacement-Time Graph",activebackground="green",height = 2,width = 20,command = lambda: displacementGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
     displacementGraphBut.grid(row=7,column=2,padx=10)
     widgets.append(displacementGraphBut)
@@ -261,17 +264,21 @@ def loadNewSim():
     saveNameEntryBox.grid(row=6,column=4)
     widgets.append(saveNameEntryBox)
 
+    #button to call the save function to save the current parameters
     saveBut = Button(guiCanvas,text="Save Parameters",activebackground = "green", height = 2,width=20,command = lambda: createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,saveNameEntryBox,circleSizeEntryBox))
     saveBut.grid(row=7,column=4)
     widgets.append(saveBut)
 
 
 
-
+    #defines the 5 radio buttons
     (but1,but2,but3,but4,but5) = (1,1,1,1,1)
     radioButtons = [but1,but2,but3,but4,but5]
     v = IntVar()
     
+    #creates the list of different values the user can guess
+    #puts each entry in the list as a radio button
+    #places them in the grid
     guessOptions = ["None","Horizontal displacement (m)","Total displacement (m)","Final vertical velocity (m/s)","Final total velocity (m/s)"]
     for i in range (0,len(radioButtons)):
         radioButtons[i] = Radiobutton(guiCanvas,text = guessOptions[i],variable =v,value = i+1)
@@ -292,11 +299,12 @@ def loadNewSim():
     guessTextBox.grid(row=7,column=0)
     guessTextBox.config(state=DISABLED)
 
-
+    #button to call the runSimulationfunction to run the simulation with the current paramteters that have been entered
     runBut=Button(guiCanvas,text="Run Simulation",activebackground="green",height=2,width=20,command= lambda: runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox,v,guessEntryBox))
     runBut.grid(row=5,column=2,padx=10)
     widgets.append(runBut)
 
+    #button to return the user to the main menu (calls the loadMain function)
     menuBut = Button(guiCanvas,text="Back to menu",activebackground="green",height=2,width=20,command = loadMain)
     menuBut.grid(row=0,column=2,padx=10)
     widgets.append(menuBut)
@@ -307,22 +315,25 @@ def loadNewSim():
 #load a saved simualtion menu
 def loadSavedSim():
     deleteWids()
-    with open("saves.json","r")as saveFile:
+    with open("saves.json","r")as saveFile: #opens the json file "saves"
         try:
-            data = jason.load(saveFile)
+            data = jason.load(saveFile) #puts the data from the json file into a list for easier use
         except:
-            data = []
+            data = [] #error checks
     saveOptions = [d["name"]for d in data]
 
+    #creates option box so the user can choose a save to run
     saveChoiceValue = StringVar()
     saveChoiceDropDown = ttk.Combobox(guiCanvas,values = saveOptions, state = "readonly", textvariable = saveChoiceValue, font = "Roboto")
     saveChoiceDropDown.grid(row = 1,column = 1)
     widgets.append(saveChoiceDropDown)
 
+    #button that calls the loadMain subroutine
     menuBut = Button(guiCanvas,text="Back to menu",activebackground="green",height=2,width=33,command = loadMain)
     menuBut.grid(row=0,column=1,padx=10,pady=10)
     widgets.append(menuBut)
 
+    #button that calls the runSimulation subroutine
     runBut = Button(guiCanvas,text = "Run saved simulation",activebackground = "green",height = 2, width = 33,command = partial(runSavedSim,saveChoiceValue))
     runBut.grid(row = 2,column = 1,padx=10,pady=10)
     widgets.append(runBut)
