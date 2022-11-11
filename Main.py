@@ -204,7 +204,7 @@ def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v,screen,
         checkGuess(screen,finalYVelocity,projectile,guess,v,multi)
     else:
         if len(trails) > 0:
-            drawCenterText(screen,"Space to pause[Q to quit]")
+            drawCenterText(screen,"[Space to pause][Q to quit]")
     pygame.display.update()
     try:
         return(trails,currentTrailCounter)
@@ -212,16 +212,17 @@ def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v,screen,
         pass
 
 #pause the simulation subroutine
-def pause():
+def pause(end):
     paused = True
     while paused:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE: #stays paused until space is hit
-                    paused = False
-                elif event.key == pygame.K_q: #quit simulation if q is hit
+                if end:
+                    if event.key == pygame.K_SPACE: #stays paused until space is hit
+                        paused = False
+                if event.key == pygame.K_q: #quit simulation if q is hit
                     pygame.quit()
 
                     
@@ -244,23 +245,24 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
-                        pause()
+                        pause(True)
                     if event.key == pygame.K_q:
                         pygame.quit()
             (trails,currentTrailCounter) = (updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,whichGuess,screen,trailCounter,trails,currentTrailCounter))
             if first: #only does this part once (at the start)
                 drawCenterText(screen,"[Space to start][Q to quit]")
                 pygame.display.update()
-                pause()
+                pause(True)
             first = False 
             (projectile.xPos,projectile.yPos,projectile.horiVelocity,projectile.vertVelocity,projectile.radAngle)= calculateCircle(projectile,0,0.25)
         (addX,addY) = finalAdjustments(projectile,multi)
         projectile.xPos += addX/multi
         projectile.yPos += addY
         (trails,currentTrailCounter) = (updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,whichGuess,screen,trailCounter,trails,currentTrailCounter))
-        drawCenterText(screen,"[Space to finish][Q to quit]")
+        drawCenterText(screen,"                                                        ")
+        drawCenterText(screen,"[Q to quit]")
         pygame.display.update()
-        pause()
+        pause(False)
         pygame.quit()
 
 
