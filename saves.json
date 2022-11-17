@@ -62,5 +62,13 @@
     "gravity": -10.0,
     "initial height": 0.0,
     "circle size": 20.0
+  },
+  {
+    "name": "Elliott's Save",
+    "initial velocity": 69.0,
+    "initial angle": 69.0,
+    "gravity": -69.0,
+    "initial height": 69.0,
+    "circle size": 69.0
   }
 ]

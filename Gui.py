@@ -14,19 +14,20 @@ import json as jason
 import tkinter.ttk as ttk
 
 #yucky yucky globals
-global widgets
-global guiCanvas
+global validFloat
 
-#save files
-class save:
-    def __init__(self,name,velocity,angle,gravity,height,circleSize):
-        self.name = name
-        self.velocity=velocity
-        self.angle=angle
-        self.gravity=gravity
-        self.height=height
-        self.circleSize=circleSize
 
+#performs a check each time the user tries to enter a value in an entry box
+#only allows numbers and decimals to be entered
+def entryCheck(entry):
+    if entry == "":
+        return True
+    try:
+        float(entry)
+    except:
+        return False
+    else: 
+        return True
 
 
 #create save subroutine
@@ -35,7 +36,7 @@ def createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,sav
         (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
         name = saveNameEntryBox.get()
         if name != "":
-            savesDict = {
+            savesDict = {       #puts all the paramters the user has entered into a dictionary so that they can be handled more easily
                 "name" : name,
                 "initial velocity" : velocity,
                 "initial angle" : angle,
@@ -43,19 +44,19 @@ def createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,sav
                 "initial height" : height,
                 "circle size" : circleSize
             }
-            with open("saves.json","r")as saveFile:
+            with open("saves.json","r")as saveFile: #opens the save file in read mode
                 try:
-                    data = jason.load(saveFile)
+                    data = jason.load(saveFile) #tries to put the save file in a list
                 except:
-                    data = []
+                    data = [] #if it can't, it means the save file is empty, and so a new, blank list is created
                     pass
-                data.append(savesDict)
-            with open("saves.json","w")as saveFile:
-                jason.dump(data, saveFile, indent=2)
+                data.append(savesDict) #new save parameters added to the list
+            with open("saves.json","w")as saveFile: #opens the save file in write mode
+                jason.dump(data, saveFile, indent=2) #rewrites all the data from the list into the json save file
             if len(widgets) > 25:
-                widgets.pop(-1).grid_remove()
+                widgets.pop(-1).grid_remove() #removes the error messag for there not being a save name, if there was one on screen
         else:
-            if len(widgets) < 26:
+            if len(widgets) < 26: #makes error message appear if no save name entered
                 nameErrorTextBox = Text(guiCanvas, height = 2, width = 20,bg="CYAN",borderwidth=0,font="Roboto")
                 nameErrorTextBox.tag_configure("center",justify = "center")
                 widgets.append(nameErrorTextBox)
@@ -64,7 +65,7 @@ def createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,sav
                 nameErrorTextBox.grid(row=8,column=4)
                 nameErrorTextBox.config(state=DISABLED)
     except:
-        errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
+        errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox) #if there were any invalid values in the entry box then nothing is saved and the values are replaced by default
 
 #list of widgets
 #used to store all the widgets currently on the screen, used to delete them so new ones can be drawn
@@ -74,6 +75,8 @@ widgets = []
 frame = Tk()
 frame.geometry("1400x800")
 frame.resizable(False,False)
+
+validFloat = frame.register(entryCheck) #variable used to check the entry values
 
 #Create the canvas
 guiCanvas = Canvas(frame,bg = "cyan",height="800",width="1400")
@@ -123,27 +126,27 @@ def errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,c
         numCheck = float(velocityEntryBox.get())
     except:
         velocityEntryBox.delete(0,last=99999)
-        velocityEntryBox.insert(0,"Please enter a number")
+        velocityEntryBox.insert(0,"50")
     try:
         numCheck = float(angleEntryBox.get())
     except:
         angleEntryBox.delete(0,last=99999)
-        angleEntryBox.insert(0,"Please enter a number")
+        angleEntryBox.insert(0,"45")
     try:
         numCheck = float(gravityEntryBox.get())
     except:
         gravityEntryBox.delete(0,last=99999)
-        gravityEntryBox.insert(0,"Please enter a number")
+        gravityEntryBox.insert(0,"10")
     try:
         numCheck = float(heightEntryBox.get())
     except:
         heightEntryBox.delete(0,last=99999)
-        heightEntryBox.insert(0,"Please enter a number")
+        heightEntryBox.insert(0,"0")
     try:
         numCheck = float(circleSizeEntryBox.get())
     except:
         circleSizeEntryBox.delete(0,last=99999)
-        circleSizeEntryBox.insert(0,"Please enter a number")
+        circleSizeEntryBox.insert(0,"20")
 
 #draw graph subroutines
 def velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox):
@@ -167,7 +170,7 @@ def loadNewSim():
     deleteWids()
 #this just creates all the buttons and entry boxes
 #puts each of them in a grid, all with the same font
-    angleEntryBox = Entry(guiCanvas,width=20,validate = "focusout")
+    angleEntryBox = Entry(guiCanvas,width=20,validate = "key", validatecommand = (validFloat,"%P"))
     angleEntryBox.insert(0,"45")
     angleEntryBox.grid(row=1,column=1)
     widgets.append(angleEntryBox)
@@ -181,7 +184,7 @@ def loadNewSim():
     angleTextBox.config(state=DISABLED)
 
 
-    velocityEntryBox = Entry(guiCanvas,width=20,validate="focusout")
+    velocityEntryBox = Entry(guiCanvas,width=20,validate="key", validatecommand = (validFloat,"%P"))
     velocityEntryBox.insert(0,"50")
     velocityEntryBox.grid(row=1,column=3)
     widgets.append(velocityEntryBox)
@@ -195,7 +198,7 @@ def loadNewSim():
     velocityTextBox.config(state=DISABLED)
 
 
-    gravityEntryBox = Entry(guiCanvas,width=20,validate="focusout")
+    gravityEntryBox = Entry(guiCanvas,width=20,validate="key", validatecommand = (validFloat,"%P"))
     gravityEntryBox.insert(0,"10")
     gravityEntryBox.grid(row=3,column=3)
     widgets.append(gravityEntryBox)
@@ -209,7 +212,7 @@ def loadNewSim():
     gravityTextBox.config(state=DISABLED)
 
 
-    heightEntryBox = Entry(guiCanvas,width = 20,validate="focusout")
+    heightEntryBox = Entry(guiCanvas,width = 20,validate="key", validatecommand = (validFloat,"%P"))
     heightEntryBox.insert(0,"0")
     heightEntryBox.grid(row=3,column=1)
     widgets.append(heightEntryBox)
@@ -223,7 +226,7 @@ def loadNewSim():
     heightTextBox.config(state=DISABLED)
 
 
-    circleSizeEntryBox = Entry(guiCanvas,width=20,validate="focusout")
+    circleSizeEntryBox = Entry(guiCanvas,width=20,validate="key", validatecommand = (validFloat,"%P"))
     circleSizeEntryBox.insert(0,"20")
     circleSizeEntryBox.grid(row=5,column=1)
     widgets.append(circleSizeEntryBox)
