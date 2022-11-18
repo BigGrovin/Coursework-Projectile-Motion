@@ -35,11 +35,11 @@ class trailCircle:
 
 #calculate the max height and distance of projectile
 def calculateDistances(projectile,finalVerticalVelocity):
-    flightTime = (finalVerticalVelocity-projectile.vertVelocity)/projectile.acceleration
-    horiDistance = projectile.horiVelocity * flightTime
-    timeOfVertDistance = (projectile.velocity*-1)/projectile.acceleration
-    vertDistance = (projectile.vertVelocity * timeOfVertDistance + 0.5*projectile.acceleration*timeOfVertDistance**2)+projectile.initialHeight
-    return (horiDistance,vertDistance)
+    flightTime = (finalVerticalVelocity-projectile.vertVelocity)/projectile.acceleration #cs;cu;ates how long the flight would last
+    horiDistance = projectile.horiVelocity * flightTime #calculates how far horizontally the projectile will travel
+    timeOfVertDistance = (projectile.velocity*-1)/projectile.acceleration #calculates the time during the flight that the projectile will reach its maximum height
+    vertDistance = (projectile.vertVelocity * timeOfVertDistance + 0.5*projectile.acceleration*timeOfVertDistance**2)+projectile.initialHeight #calculates the maximum height that the projectile will reach
+    return (horiDistance,vertDistance) #returns the maximum height and distance reached
 
 #calculate new positions of circle subroutine
 def calculateCircle(projectile,xAcceleration,multi):
@@ -230,7 +230,6 @@ def pause(end):
 def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         screen = draw()
         projectile = Projectile(velocity,angle,gravity,height,circleSize) #creates projectile object
-        print(projectile.acceleration)
         finalYVelocity = -1*(math.sqrt(projectile.vertVelocity**2 - 2 * projectile.acceleration * projectile.initialHeight))
         (projectile.maxHoriDistance,projectile.maxVertDistance)=calculateDistances(projectile,finalYVelocity)
         (xScales,yScales,multi) = calculateScale(projectile)
@@ -240,7 +239,6 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         trailCounter = ((projectile.maxHoriDistance / multi)/100)
         currentTrailCounter = trailCounter
         trails = []
-        print (trailCounter)
         while projectile.yPos > projectile.size:
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:

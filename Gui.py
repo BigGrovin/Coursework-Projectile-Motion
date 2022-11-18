@@ -84,20 +84,20 @@ guiCanvas = Canvas(frame,bg = "cyan",height="800",width="1400")
 
 #Load MainMenu subroutine
 def loadMain():
-    deleteWids()
-    newSimBut = Button(guiCanvas,text="Create New Simulation",activebackground="green",height=7,width=20, command = loadNewSim)
-    savedSimsBut = Button(guiCanvas,text="Saved Simulations",activebackground="green",height=7,width=20, command = loadSavedSim)
-    widgets.append(newSimBut)
+    deleteWids() #deletes all the existing widgets on the screen
+    newSimBut = Button(guiCanvas,text="Create New Simulation",activebackground="green",height=7,width=20, command = loadNewSim) #creates the button which calls loadNewSim
+    savedSimsBut = Button(guiCanvas,text="Saved Simulations",activebackground="green",height=7,width=20, command = loadSavedSim) #creates the button which calls loadSavedSim
+    widgets.append(newSimBut) #adds the widgets to the widgets list to be deleted later
     widgets.append(savedSimsBut)
     newSimBut.grid(row=1,column=1,padx=20,pady=20)
     savedSimsBut.grid(row=1,column=3,padx=20,pady=20)
     guiCanvas.pack()
 
 
-#collect values subroutine
+#subroutine to collect all the calues from the  entry boxes
 def collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox):
-    velocity = float((velocityEntryBox.get()))
-    angle = float((angleEntryBox.get()))
+    velocity = float((velocityEntryBox.get())) #grabs all the values and converts them to floats as they are strings initially
+    angle = float((angleEntryBox.get())) 
     gravity = (float(gravityEntryBox.get()))*-1
     height = float((heightEntryBox.get()))
     circleSize = float((circleSizeEntryBox.get()))
@@ -105,22 +105,24 @@ def collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,
 
 
 
-#run simulation subroutine
+#subroutine to run begin running the simulation
 def runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox,v,guessEntryBox):
     try:
-        whichGuess = v.get()
+        whichGuess = v.get() #gets the users guess value
         try:
-            guess = round(float(guessEntryBox.get()),1)
+            guess = round(float(guessEntryBox.get()),1) #rounds their value to 1dp
         except:
-            guess = 0
-        (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
-        main.runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height)
+            guess = 0 #if the guess is a word or something else then guess is entered as 0
+        (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox) #calls the collect values subroutine so that the values can be stored as variables and used
+        main.runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height) #calls the run it all subroutine, this opens a pygame window and uses the parameters collected to run the simulation
     except:
-        errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
+        errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox) #calls error message subroutine in case of any values being invalid
 
 
 
 #display error in input boxes if invalid entry
+#checks each entry individually to ensure that it can be converted to float
+#if it can't then whatever invalid data the user has entered is replaced by the default value
 def errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox):
     try:
         numCheck = float(velocityEntryBox.get())
@@ -149,18 +151,18 @@ def errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,c
         circleSizeEntryBox.insert(0,"20")
 
 #draw graph subroutines
-def velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox):
+def velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox): #calls subroutines to collect values and draw a graph
     try:
         (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
-        graph.drawVelocityGraph(velocity,angle,gravity,height)
+        graph.drawVelocityGraph(velocity,angle,gravity,height) #draws a graph of velocity against time with the paramters collected from the entry boxes
     except:
         errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox)
 
 
-def displacementGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox):
+def displacementGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox): #calls subroutines to collect values and draw a graph
     try:
         (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
-        graph.drawDisplacementGraph(velocity,angle,gravity,height)
+        graph.drawDisplacementGraph(velocity,angle,gravity,height) #draws a graph of displacement against time with the parameers collected from the entry boxes
     except:
         errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox)
 
@@ -168,7 +170,7 @@ def displacementGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntry
 #Load new simulation subroutine
 def loadNewSim():
     deleteWids()
-#this just creates all the buttons and entry boxes
+#creates all the buttons and entry boxes
 #puts each of them in a grid, all with the same font
     angleEntryBox = Entry(guiCanvas,width=20,validate = "key", validatecommand = (validFloat,"%P"))
     angleEntryBox.insert(0,"45")
@@ -280,7 +282,7 @@ def loadNewSim():
     v = IntVar()
     
     #creates the list of different values the user can guess
-    #puts each entry in the list as a radio button
+    #puts each value in the list as a radio button
     #places them in the grid
     guessOptions = ["None","Horizontal displacement (m)","Total displacement (m)","Final vertical velocity (m/s)","Final total velocity (m/s)"]
     for i in range (0,len(radioButtons)):
@@ -290,11 +292,11 @@ def loadNewSim():
     v.set(1)
     
 
-    guessEntryBox = Entry(guiCanvas,width = 20)
+    guessEntryBox = Entry(guiCanvas,width = 20) #creates an entry for the user to enter their guess value and places it in the grid
     guessEntryBox.grid(row = 9,column = 0)
     widgets.append(guessEntryBox)
 
-    guessTextBox = Text(guiCanvas,height=2,width=30,bg="CYAN",borderwidth=0,font="Roboto")
+    guessTextBox = Text(guiCanvas,height=2,width=30,bg="CYAN",borderwidth=0,font="Roboto") #creates the corresponding text box to inform the user
     guessTextBox.tag_configure("center",justify = "center")
     widgets.append(guessTextBox)
     guessTextBox.insert("1.0","Which value would you like to guess?")
@@ -312,7 +314,7 @@ def loadNewSim():
     menuBut.grid(row=0,column=2,padx=10)
     widgets.append(menuBut)
 
-    guiCanvas.pack()
+    guiCanvas.pack() #updates the canvas
 
 
 #load a saved simualtion menu
@@ -353,9 +355,8 @@ def runSavedSim(saveName):
 #Delete all buttons subroutine
 def deleteWids():
     for widget in widgets:
-        widget.grid_remove()
+        widget.grid_remove() #removes each widget in te list widgets (all of the ones on screen)
     del widgets[:]
 
-#test stuff
 loadMain()
 frame.mainloop()
