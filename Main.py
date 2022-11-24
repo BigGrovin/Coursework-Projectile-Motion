@@ -35,7 +35,7 @@ class trailCircle:
 
 #calculate the max height and distance of projectile
 def calculateDistances(projectile,finalVerticalVelocity):
-    flightTime = (finalVerticalVelocity-projectile.vertVelocity)/projectile.acceleration #cs;cu;ates how long the flight would last
+    flightTime = (finalVerticalVelocity-projectile.vertVelocity)/projectile.acceleration #calculates how long the flight would last
     horiDistance = projectile.horiVelocity * flightTime #calculates how far horizontally the projectile will travel
     timeOfVertDistance = (projectile.velocity*-1)/projectile.acceleration #calculates the time during the flight that the projectile will reach its maximum height
     vertDistance = (projectile.vertVelocity * timeOfVertDistance + 0.5*projectile.acceleration*timeOfVertDistance**2)+projectile.initialHeight #calculates the maximum height that the projectile will reach
@@ -43,14 +43,14 @@ def calculateDistances(projectile,finalVerticalVelocity):
 
 #calculate new positions of circle subroutine
 def calculateCircle(projectile,xAcceleration,multi):
-    NradianAngle = (math.atan(projectile.vertVelocity/projectile.horiVelocity))
-    NcircleX = projectile.xPos +(projectile.horiVelocity * engine.dt * multi)
-    NcircleY = projectile.yPos +(projectile.vertVelocity * engine.dt * multi)
-    NcircleXVelocity = projectile.horiVelocity+(xAcceleration * engine.dt * multi)
-    NcircleYVelocity = projectile.vertVelocity+(projectile.acceleration * engine.dt * multi)
-    return (NcircleX,NcircleY,NcircleXVelocity,NcircleYVelocity,NradianAngle)
+    NradianAngle = (math.atan(projectile.vertVelocity/projectile.horiVelocity)) #caclualtes the new angle that the circle is travelling at
+    NcircleX = projectile.xPos +(projectile.horiVelocity * engine.dt * multi) #calculates the new x coordinate that the circle needs to be drawn at, given its currently velocity and the time between now and the last frame
+    NcircleY = projectile.yPos +(projectile.vertVelocity * engine.dt * multi) #calculates the new y coordinate that the circle needs to be drawn at, given its current velocity and the time between now and the last frame
+    NcircleXVelocity = projectile.horiVelocity+(xAcceleration * engine.dt * multi) #calculates the new velocity in the x direction of the projectile
+    NcircleYVelocity = projectile.vertVelocity+(projectile.acceleration * engine.dt * multi) #calculates the new velocity in the y direction of the projectile
+    return (NcircleX,NcircleY,NcircleXVelocity,NcircleYVelocity,NradianAngle) #returns the values calculated
 
-#calculates the scaled value of circle size
+#calculates the scaled value of circle size by multiplying the circle size and y position by the multiplier found to match the scale
 def calculateCircleSize(projectile,multi):
     scaledCircleSize = projectile.size/multi
     projectile.yPos = scaledCircleSize + 0.00000001 + projectile.initialHeight
@@ -78,7 +78,7 @@ def calculateScale(projectile):
     yScales = [str(scale) for scale in yScales]
     return (xScales,yScales,multi)
 
-#scales the values
+#scales the values by multiplying them by the multi variable found by checking the maximum distances travelled
 def scaleValues(projectile,multi):
     scaledHoriVelocity = projectile.horiVelocity/multi
     scaledVertVelocity = projectile.vertVelocity/multi
@@ -86,7 +86,8 @@ def scaleValues(projectile,multi):
     scaledHeight =projectile.initialHeight/multi
     return(scaledHoriVelocity,scaledVertVelocity,scaledAcceleration,scaledHeight)
 
-#check whether their guess is equal to the answer
+#check whether their guess is equal to the correct answer
+#rounds the answers and their guess
 #display whether they are right on screen
 def checkGuess(screen,finalYVelocity,projectile,guess,optionNum,multi):
     finalVelocity = round(math.sqrt(finalYVelocity**2+projectile.horiVelocity**2),1)
@@ -109,12 +110,12 @@ def checkGuess(screen,finalYVelocity,projectile,guess,optionNum,multi):
         screen.blit(text,textBox)
 
 
-#draqs the background grid
+#draws the background grid
 def drawBg(screen):
     bgImage = pygame.image.load('Grid.png')
     screen.blit(bgImage,(0,20))
 
-#draw the Y scales
+#draw the Y scales on the screen
 def drawYText(screen,scales):
     pygame.font.init()
     font = pygame.font.SysFont("Arial",20)
@@ -126,7 +127,7 @@ def drawYText(screen,scales):
         screen.blit(text,textBox)
         count += 1
 
-#draw the X scales
+#draw the X scales on the screen
 def drawXText(screen,scales):
     pygame.font.init()
     font = pygame.font.SysFont("Arial",20)
@@ -158,6 +159,7 @@ def drawValues(screen,multi,projectile):
         screen.blit(text,textBox)
 
 #draws text in the top center of screen
+#draws any text that is passed into the subroutine
 def drawCenterText(screen,text):
     pygame.font.init()
     font = pygame.font.SysFont("Roboto",50)
@@ -166,7 +168,7 @@ def drawCenterText(screen,text):
     textBox.center = (750,100)
     screen.blit(text,textBox) 
 
-#displays the final values of velocity etc on the screen atg the end of the subroutine
+#displays the final values of velocity etc on the screen at the end of the simulation
 def drawFinalVelocity(screen,circleYVelocity):
     pygame.font.init()
     font = pygame.font.SysFont("Arial",20)
@@ -183,27 +185,27 @@ def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v,screen,
         trails.append(trail) 
         currentTrailCounter += trailCounter
     for trail in trails:
-        pygame.draw.circle(screen,(42,56,14),(trail.xPos,820-trail.yPos),2)
+        pygame.draw.circle(screen,(42,56,14),(trail.xPos,820-trail.yPos),2) #draws all the trail circles
     pygame.draw.rect(screen,(255,255,255),(0,0,1540,20))
-    pygame.draw.rect(screen,(0,10,10),(0,820-projectile.initialHeight,20,projectile.initialHeight))
-    pygame.draw.circle(screen,(17,59,121),(projectile.xPos,820-projectile.yPos),(projectile.size))
-    pygame.draw.line(screen,(0,255,0),(projectile.xPos,820-projectile.yPos),(projectile.xPos + projectile.horiVelocity,820-projectile.yPos),width = 2)
+    pygame.draw.rect(screen,(0,10,10),(0,820-projectile.initialHeight,20,projectile.initialHeight)) #draws the platform that the projectile starts on
+    pygame.draw.circle(screen,(17,59,121),(projectile.xPos,820-projectile.yPos),(projectile.size)) #draws the projectile give its current attributes of xPos and yPos
+    pygame.draw.line(screen,(0,255,0),(projectile.xPos,820-projectile.yPos),(projectile.xPos + projectile.horiVelocity,820-projectile.yPos),width = 2) #these draq the lines and triangles that create the arrows that come from the projectile, their size and direction are based on the magnitude of the velocity and direction of the velocity
     pygame.draw.line(screen,(0,0,255),(projectile.xPos,820-projectile.yPos),(projectile.xPos,820-(projectile.yPos + projectile.vertVelocity)),width = 2)
     pygame.draw.line(screen,(255,0,255),(projectile.xPos,820-projectile.yPos),(projectile.xPos+projectile.horiVelocity,820-(projectile.yPos + projectile.vertVelocity)),width = 2)
     pygame.draw.polygon(screen,(0,255,00),points = [(projectile.xPos + projectile.horiVelocity,820-projectile.yPos-5),(projectile.xPos + projectile.horiVelocity,820-projectile.yPos+5),(projectile.xPos+projectile.horiVelocity+7,820-projectile.yPos)])
     pygame.draw.polygon(screen,(255,0,255),points=[(projectile.xPos +projectile.horiVelocity - (5*math.cos((180*math.pi/360)-projectile.radAngle)),820-(projectile.yPos + projectile.vertVelocity + (5*math.sin((180*math.pi/360)-projectile.radAngle)))),(projectile.xPos +projectile.horiVelocity + (5*math.cos((180*math.pi/360)-projectile.radAngle)),820-(projectile.yPos + projectile.vertVelocity - (5*math.sin((180*math.pi/360)-projectile.radAngle)))),(projectile.xPos + projectile.horiVelocity + 7*math.cos(projectile.radAngle),(820-(projectile.yPos + projectile.vertVelocity + 7*math.sin(projectile.radAngle))))])
-    if projectile.vertVelocity > 0:
+    if projectile.vertVelocity > 0: #if the vertical velocity is above 0 then the arrow goes upwards, if not it goes downwards
         pygame.draw.polygon(screen,(0,0,255),points=[(projectile.xPos-5,820-(projectile.yPos+projectile.vertVelocity)),(projectile.xPos+5,820-(projectile.yPos+projectile.vertVelocity)),(projectile.xPos,820-(projectile.yPos+projectile.vertVelocity+7))])
     else:
         pygame.draw.polygon(screen,(0,0,255),points=[(projectile.xPos-5,820-(projectile.yPos+projectile.vertVelocity)),(projectile.xPos+5,820-(projectile.yPos+projectile.vertVelocity)),(projectile.xPos,820-(projectile.yPos+projectile.vertVelocity-7))])
-    drawValues(screen,multi,projectile)
-    drawXText(screen,xScales)
-    drawYText(screen,yScales)
-    if  projectile.yPos - projectile.size == 0:
+    drawValues(screen,multi,projectile) #calls the subroutine to draw the values for the attributes of the projectile at the top of the screen
+    drawXText(screen,xScales) #calls subroutine to draw the scale values on x axis
+    drawYText(screen,yScales) #same for y axis
+    if  projectile.yPos - projectile.size == 0: #if the projectile is on the ground then draw the final value for velocity and check the users guess
         drawFinalVelocity(screen,finalYVelocity)
         checkGuess(screen,finalYVelocity,projectile,guess,v,multi)
     else:
-        if len(trails) > 0:
+        if len(trails) > 0: #if there is a trail circle in the list (basically if the projectile is in motion)
             drawCenterText(screen,"[Space to pause][Q to quit]")
     pygame.display.update()
     try:
@@ -227,6 +229,7 @@ def pause(end):
 
                     
 #runs the simulation from button press in GUI
+#calls all the previously mentioned subroutines to run the whole simulation
 def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         screen = draw()
         projectile = Projectile(velocity,angle,gravity,height,circleSize) #creates projectile object
