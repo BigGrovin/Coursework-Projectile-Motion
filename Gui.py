@@ -53,11 +53,11 @@ def createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,sav
                 data.append(savesDict) #new save parameters added to the list
             with open("saves.json","w")as saveFile: #opens the save file in write mode
                 jason.dump(data, saveFile, indent=2) #rewrites all the data from the list into the json save file
-            if len(widgets) > 25:
+            if len(widgets) > 26:
                 widgets.pop(-1).grid_remove() #removes the error messag for there not being a save name, if there was one on screen
         else:
-            if len(widgets) < 26: #makes error message appear if no save name entered
-                nameErrorTextBox = Text(guiCanvas, height = 2, width = 20,bg="CYAN",borderwidth=0,font="Roboto")
+            if len(widgets) < 27: #makes error message appear if no save name entered
+                nameErrorTextBox = Text(guiCanvas, height = 1, width = 20,bg = "light grey",borderwidth=0,font="Roboto")
                 nameErrorTextBox.tag_configure("center",justify = "center")
                 widgets.append(nameErrorTextBox)
                 nameErrorTextBox.insert("1.0","ERROR! Invalid Name")
@@ -79,7 +79,7 @@ frame.resizable(False,False)
 validFloat = frame.register(entryCheck) #variable used to check the entry values
 
 #Create the canvas
-guiCanvas = Canvas(frame,bg = "cyan",height="800",width="1400")
+guiCanvas = Canvas(frame,bg ="light grey",height="800",width="1400")
 
 
 #Load MainMenu subroutine
@@ -177,7 +177,7 @@ def loadNewSim():
     angleEntryBox.grid(row=1,column=1)
     widgets.append(angleEntryBox)
 
-    angleTextBox = Text(guiCanvas, height = 2, width = 30,bg="CYAN",borderwidth=0,font="Roboto")
+    angleTextBox = Text(guiCanvas, height = 2, width = 30,bg = "light grey",borderwidth=0,font="Roboto")
     angleTextBox.tag_configure("center",justify = "center")
     widgets.append(angleTextBox)
     angleTextBox.insert("1.0","Angle of Launch")
@@ -191,7 +191,7 @@ def loadNewSim():
     velocityEntryBox.grid(row=1,column=3)
     widgets.append(velocityEntryBox)
  
-    velocityTextBox = Text(guiCanvas, height = 2, width = 20,bg="CYAN",borderwidth=0,font="Roboto")
+    velocityTextBox = Text(guiCanvas, height = 2, width = 20,bg = "light grey",borderwidth=0,font="Roboto")
     velocityTextBox.tag_configure("center",justify = "center")
     widgets.append(velocityTextBox)
     velocityTextBox.insert("1.0","Initial Velocity (U)(m/s)")
@@ -205,7 +205,7 @@ def loadNewSim():
     gravityEntryBox.grid(row=3,column=3)
     widgets.append(gravityEntryBox)
 
-    gravityTextBox = Text(guiCanvas, height = 2, width = 30,bg="CYAN",borderwidth=0,font="Roboto")
+    gravityTextBox = Text(guiCanvas, height = 2, width = 30,bg = "light grey",borderwidth=0,font="Roboto")
     gravityTextBox.tag_configure("center",justify = "center")
     widgets.append(gravityTextBox)
     gravityTextBox.insert("1.0","Acceleration due to gravity (m/s^2)")
@@ -219,7 +219,7 @@ def loadNewSim():
     heightEntryBox.grid(row=3,column=1)
     widgets.append(heightEntryBox)
 
-    heightTextBox = Text(guiCanvas,height=2,width=30,bg="CYAN",borderwidth=0,font="Roboto")
+    heightTextBox = Text(guiCanvas,height=2,width=30,bg = "light grey",borderwidth=0,font="Roboto")
     heightTextBox.tag_configure("center",justify= "center")
     widgets.append(heightTextBox)
     heightTextBox.insert("1.0","Initial height (m)")
@@ -233,7 +233,7 @@ def loadNewSim():
     circleSizeEntryBox.grid(row=5,column=1)
     widgets.append(circleSizeEntryBox)
 
-    circleSizeTextBox = Text(guiCanvas,height=2,width=30,bg="CYAN",borderwidth=0,font="Roboto")
+    circleSizeTextBox = Text(guiCanvas,height=2,width=30,bg = "light grey",borderwidth=0,font="Roboto")
     circleSizeTextBox.tag_configure("center",justify = "center")
     widgets.append(circleSizeTextBox)
     circleSizeTextBox.insert("1.0","Radius of projectile (m)")
@@ -247,7 +247,7 @@ def loadNewSim():
     massEntryBox.grid(row=5,column=3)
     widgets.append(massEntryBox)
 
-    massTextBox = Text(guiCanvas,height=2,width=30,bg="CYAN",borderwidth=0,font="Roboto")
+    massTextBox = Text(guiCanvas,height=2,width=30,bg = "light grey",borderwidth=0,font="Roboto")
     massTextBox.tag_configure("center",justify = "center")
     widgets.append(massTextBox)
     massTextBox.insert("1.0","Mass of projectile (Kg)")
@@ -256,22 +256,30 @@ def loadNewSim():
     massTextBox.config(state=DISABLED)
 
     #button to call the drawVelocityGraph function
-    velocityGraphBut = Button(guiCanvas,text="Draw Velocity-Time Graph",activebackground="green",height = 2,width=20,command= lambda: velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
+    velocityGraphBut = Button(guiCanvas,text="Draw Velocity-Time Graph",activebackground="green",height = 2,width=25,command= lambda: velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
     velocityGraphBut.grid(row=6,column=2,padx=10)
     widgets.append(velocityGraphBut)
 
     #button to call the drawDisplacementGraph function
-    displacementGraphBut = Button(guiCanvas,text = "Draw Displacement-Time Graph",activebackground="green",height = 2,width = 20,command = lambda: displacementGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
+    displacementGraphBut = Button(guiCanvas,text = "Draw Displacement-Time Graph",activebackground="green",height = 2,width = 25,command = lambda: displacementGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
     displacementGraphBut.grid(row=7,column=2,padx=10)
     widgets.append(displacementGraphBut)
 
+    saveTextBox = Text(guiCanvas,height = 2, width = 25, bg = "light grey", borderwidth = 0, font = "Roboto")
+    saveTextBox.tag_configure("center",justify = "center")
+    widgets.append(saveTextBox)
+    saveTextBox.insert("1.0","Enter a save name to save")
+    saveTextBox.tag_add("center","1.0","end")
+    saveTextBox.grid(row=9,column=4)
+    saveTextBox.config(state=DISABLED)
+
     saveNameEntryBox = Entry(guiCanvas,width = 20)
-    saveNameEntryBox.grid(row=6,column=4)
+    saveNameEntryBox.grid(row=10,column=4)
     widgets.append(saveNameEntryBox)
 
     #button to call the save function to save the current parameters
     saveBut = Button(guiCanvas,text="Save Parameters",activebackground = "green", height = 2,width=20,command = lambda: createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,saveNameEntryBox,circleSizeEntryBox))
-    saveBut.grid(row=7,column=4)
+    saveBut.grid(row=11,column=4)
     widgets.append(saveBut)
 
 
@@ -296,7 +304,7 @@ def loadNewSim():
     guessEntryBox.grid(row = 9,column = 0)
     widgets.append(guessEntryBox)
 
-    guessTextBox = Text(guiCanvas,height=2,width=30,bg="CYAN",borderwidth=0,font="Roboto") #creates the corresponding text box to inform the user
+    guessTextBox = Text(guiCanvas,height=2,width=30,bg = "light grey",borderwidth=0,font="Roboto") #creates the corresponding text box to inform the user
     guessTextBox.tag_configure("center",justify = "center")
     widgets.append(guessTextBox)
     guessTextBox.insert("1.0","Which value would you like to guess?")
@@ -305,12 +313,12 @@ def loadNewSim():
     guessTextBox.config(state=DISABLED)
 
     #button to call the runSimulationfunction to run the simulation with the current paramteters that have been entered
-    runBut=Button(guiCanvas,text="Run Simulation",activebackground="green",height=2,width=20,command= lambda: runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox,v,guessEntryBox))
+    runBut=Button(guiCanvas,text="Run Simulation",activebackground="green",height=2,width=25,command= lambda: runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox,v,guessEntryBox))
     runBut.grid(row=5,column=2,padx=10)
     widgets.append(runBut)
 
     #button to return the user to the main menu (calls the loadMain function)
-    menuBut = Button(guiCanvas,text="Back to menu",activebackground="green",height=2,width=20,command = loadMain)
+    menuBut = Button(guiCanvas,text="Back to menu",activebackground="green",height=2,width=25,command = loadMain)
     menuBut.grid(row=0,column=2,padx=10)
     widgets.append(menuBut)
 

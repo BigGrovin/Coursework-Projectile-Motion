@@ -265,7 +265,3 @@ def runItAll(guess,velocity,angle,whichGuess,circleSize,gravity,height):
         pygame.display.update()
         pause(False)
         pygame.quit()
-
-
-
-

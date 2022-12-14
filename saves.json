@@ -70,5 +70,13 @@
     "gravity": -69.0,
     "initial height": 69.0,
     "circle size": 69.0
+  },
+  {
+    "name": "holaaa",
+    "initial velocity": 50.0,
+    "initial angle": 45.0,
+    "gravity": -10.0,
+    "initial height": 0.0,
+    "circle size": 20.0
   }
 ]
