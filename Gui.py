@@ -85,8 +85,8 @@ guiCanvas = Canvas(frame,bg ="light grey",height="800",width="1400")
 #Load MainMenu subroutine
 def loadMain():
     deleteWids() #deletes all the existing widgets on the screen
-    newSimBut = Button(guiCanvas,text="Create New Simulation",activebackground="green",height=7,width=20, command = loadNewSim) #creates the button which calls loadNewSim
-    savedSimsBut = Button(guiCanvas,text="Saved Simulations",activebackground="green",height=7,width=20, command = loadSavedSim) #creates the button which calls loadSavedSim
+    newSimBut = Button(guiCanvas,text="Create New Simulation",activebackground="light green",height=7,width=20, command = loadNewSim) #creates the button which calls loadNewSim
+    savedSimsBut = Button(guiCanvas,text="Saved Simulations",activebackground="light green",height=7,width=20, command = loadSavedSim) #creates the button which calls loadSavedSim
     widgets.append(newSimBut) #adds the widgets to the widgets list to be deleted later
     widgets.append(savedSimsBut)
     newSimBut.grid(row=1,column=1,padx=20,pady=20)
@@ -128,7 +128,7 @@ def errorMessage(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,c
         numCheck = float(velocityEntryBox.get())
     except:
         velocityEntryBox.delete(0,last=99999)
-        velocityEntryBox.insert(0,"50")
+        velocityEntryBox.insert(0,"100")
     try:
         numCheck = float(angleEntryBox.get())
     except:
@@ -187,7 +187,7 @@ def loadNewSim():
 
 
     velocityEntryBox = Entry(guiCanvas,width=20,validate="key", validatecommand = (validFloat,"%P"))
-    velocityEntryBox.insert(0,"50")
+    velocityEntryBox.insert(0,"100")
     velocityEntryBox.grid(row=1,column=3)
     widgets.append(velocityEntryBox)
  
@@ -256,12 +256,12 @@ def loadNewSim():
     massTextBox.config(state=DISABLED)
 
     #button to call the drawVelocityGraph function
-    velocityGraphBut = Button(guiCanvas,text="Draw Velocity-Time Graph",activebackground="green",height = 2,width=25,command= lambda: velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
+    velocityGraphBut = Button(guiCanvas,text="Draw Velocity-Time Graph",activebackground="light green",height = 2,width=25,command= lambda: velocityGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
     velocityGraphBut.grid(row=6,column=2,padx=10)
     widgets.append(velocityGraphBut)
 
     #button to call the drawDisplacementGraph function
-    displacementGraphBut = Button(guiCanvas,text = "Draw Displacement-Time Graph",activebackground="green",height = 2,width = 25,command = lambda: displacementGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
+    displacementGraphBut = Button(guiCanvas,text = "Draw Displacement-Time Graph",activebackground="light green",height = 2,width = 25,command = lambda: displacementGraph(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox))
     displacementGraphBut.grid(row=7,column=2,padx=10)
     widgets.append(displacementGraphBut)
 
@@ -278,7 +278,7 @@ def loadNewSim():
     widgets.append(saveNameEntryBox)
 
     #button to call the save function to save the current parameters
-    saveBut = Button(guiCanvas,text="Save Parameters",activebackground = "green", height = 2,width=20,command = lambda: createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,saveNameEntryBox,circleSizeEntryBox))
+    saveBut = Button(guiCanvas,text="Save Parameters",activebackground = "light green", height = 2,width=20,command = lambda: createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,saveNameEntryBox,circleSizeEntryBox))
     saveBut.grid(row=11,column=4)
     widgets.append(saveBut)
 
@@ -313,12 +313,12 @@ def loadNewSim():
     guessTextBox.config(state=DISABLED)
 
     #button to call the runSimulationfunction to run the simulation with the current paramteters that have been entered
-    runBut=Button(guiCanvas,text="Run Simulation",activebackground="green",height=2,width=25,command= lambda: runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox,v,guessEntryBox))
+    runBut=Button(guiCanvas,text="Run Simulation",activebackground="light green",height=2,width=25,command= lambda: runSimulation(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox,v,guessEntryBox))
     runBut.grid(row=5,column=2,padx=10)
     widgets.append(runBut)
 
     #button to return the user to the main menu (calls the loadMain function)
-    menuBut = Button(guiCanvas,text="Back to menu",activebackground="green",height=2,width=25,command = loadMain)
+    menuBut = Button(guiCanvas,text="Back to menu",activebackground="light green",height=2,width=25,command = loadMain)
     menuBut.grid(row=0,column=2,padx=10)
     widgets.append(menuBut)
 
@@ -342,12 +342,12 @@ def loadSavedSim():
     widgets.append(saveChoiceDropDown)
 
     #button that calls the loadMain subroutine
-    menuBut = Button(guiCanvas,text="Back to menu",activebackground="green",height=2,width=33,command = loadMain)
+    menuBut = Button(guiCanvas,text="Back to menu",activebackground="light green",height=2,width=33,command = loadMain)
     menuBut.grid(row=0,column=1,padx=10,pady=10)
     widgets.append(menuBut)
 
     #button that calls the runSimulation subroutine
-    runBut = Button(guiCanvas,text = "Run saved simulation",activebackground = "green",height = 2, width = 33,command = partial(runSavedSim,saveChoiceValue))
+    runBut = Button(guiCanvas,text = "Run saved simulation",activebackground = "light green",height = 2, width = 33,command = partial(runSavedSim,saveChoiceValue))
     runBut.grid(row = 2,column = 1,padx=10,pady=10)
     widgets.append(runBut)
 
