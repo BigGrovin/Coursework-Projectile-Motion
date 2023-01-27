@@ -13,7 +13,7 @@ from Main import Projectile
 import json as jason
 import tkinter.ttk as ttk
 
-#yucky yucky globals
+#globals
 global validFloat
 
 
@@ -31,11 +31,13 @@ def entryCheck(entry):
 
 
 #create save subroutine
+########## GROUP A - File organised for firect access ##########
 def createSave(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,saveNameEntryBox,circleSizeEntryBox):
     try:
         (velocity,angle,gravity,height,circleSize)=collectValues(velocityEntryBox,angleEntryBox,gravityEntryBox,heightEntryBox,circleSizeEntryBox)
         name = saveNameEntryBox.get()
         if name != "":
+            ########### GROUP B - Dictionaries ##########
             savesDict = {       #puts all the paramters the user has entered into a dictionary so that they can be handled more easily
                 "name" : name,
                 "initial velocity" : velocity,

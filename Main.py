@@ -6,6 +6,8 @@ engine = Engine()
 playing = True
 engine.update_dt()
 
+########## GROUP C - appropriate choice of simple data types ##########
+
 #setup pygame window
 def draw():
     screen = pygame.display.set_mode((1540,820))
@@ -13,6 +15,7 @@ def draw():
     return screen
 
 #defines class for the projectile so it can be used throughout
+########## GROUP A - Progarmming (OOP) model #########
 class Projectile:
     def __init__ (self,velocity,angle,gravity,height,size):
         self.radAngle = (angle*2*math.pi/360)
@@ -72,6 +75,7 @@ def calculateScale(projectile):
     print(multi)
     tempXScales = [300,600,900,1200,1500]
     tempYScales = [200,400,600,800]
+    ########## GROUP C - single dimensional arrays #########
     xScales = [item * multi for item in tempXScales]
     xScales = [str(scale) for scale in xScales]
     yScales = [item * multi for item in tempYScales]
@@ -89,6 +93,7 @@ def scaleValues(projectile,multi):
 #check whether their guess is equal to the correct answer
 #rounds the answers and their guess
 #display whether they are right on screen
+########## GROUP A - Complex scientific/mathematical model ##########
 def checkGuess(screen,finalYVelocity,projectile,guess,optionNum,multi):
     finalVelocity = round(math.sqrt(finalYVelocity**2+projectile.horiVelocity**2),1)
     finalDisplacement = round((math.sqrt(projectile.initialHeight**2+projectile.maxHoriDistance**2)),1)
@@ -178,6 +183,7 @@ def drawFinalVelocity(screen,circleYVelocity):
     screen.blit(text,textBox)
 
 #draw repositioned circle subroutine
+########## GROUP B - simple mathematical model ###########
 def updateCircle(projectile,xScales,yScales,finalYVelocity,multi,guess,v,screen,trailCounter,trails,currentTrailCounter):
     drawBg(screen)
     if (projectile.xPos) > currentTrailCounter:
